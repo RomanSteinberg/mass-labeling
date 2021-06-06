@@ -1,4 +1,6 @@
 /* eslint-disable no-underscore-dangle */
+const config = require('../../config');
+
 const Site = require('../../models/site');
 const Task = require('../../models/task');
 const TaskSet = require('../../models/taskset');
@@ -54,6 +56,8 @@ router.post('/create', async (req, res, next) => {
 
 		const site = await Site.getRandom(additionalFilter);
 
+		const entityMode = config.get('boot.entityMode');
+
 		// User has any task
 		if (site) {
 			logger.info({
@@ -64,6 +68,9 @@ router.post('/create', async (req, res, next) => {
 			res.api.response({
 				siteId: site.id,
 				siteStatus: site.status,
+				siteUrl: site.url,
+				siteFormText: site.formText || '',
+				entityMode,
 			});
 		} else {
 			res.api.response({

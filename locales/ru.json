@@ -1,8 +1,12 @@
 {
   "broken_sites": "Испорченные изображения",
+  "broken_links": "Испорченные ссылки",
+  "broken_forms": "Испорченные формы",
   "unchecked": "Не проверенные",
   "check_sites": "Перейти к проверке",
   "scored_sites_title": "Оценка изображений",
+  "scored_links_title": "Оценка ссылок",
+  "scored_forms_title": "Оценка форм",
   "get_new_task": "Получить новую задачу",
   "users": "Пользователи",
   "stats": "Статистика",
@@ -32,6 +36,8 @@
   "try_variants": "Попробуйте следующие варианты",
   "go_to_main": "Перейти на главную",
   "show_broken": "Пересмотр сломанных изображений",
+  "show_broken_links": "Пересмотр сломанных ссылок",
+  "show_broken_forms": "Пересмотр сломанных форм",
   "screenshot": "Изображение",
   "check_result": "Результат проверки",
   "is_working": "ОК",
@@ -79,6 +85,12 @@
   },
   "site_errors": {
     "site_not_found": "Сайт не найден"
+  },
+  "graded_text_errors": {
+    "graded_text_not_found": "Оцениваемый текст не найден"
+  },
+  "graded_form_errors": {
+    "graded_form_not_found": "Оцениваемая форма не найдена"
   },
   "task_errors": {
     "bad_markup_request": "Некорректный запрос",

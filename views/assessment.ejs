@@ -14,9 +14,9 @@
 			<a href="/" class="navbar-brand">Mass labeling</a>
 		</div>
 
-    <ul class="nav navbar-nav">
-      <li><a href="/instruction" target="_blank"><%= getText('tutorial') %></a></li>
-    </ul>
+		<ul class="nav navbar-nav">
+		  <li><a href="/instruction" target="_blank"><%= getText('tutorial') %></a></li>
+		</ul>
 
 		<div class="navbar-right">
 			<ul class="nav navbar-nav">
@@ -28,20 +28,20 @@
 			</ul>
 
 			<p class="navbar-text" title="<%= getText('scored_limit') %>">
-        <%= getText('scored') %>:
+        		<%= getText('scored') %>:
 				<span id="markup-count"><%= count %></span>
 				/
 				<%= limit === Infinity ? '∞' : limit %>
 			</p>
 
-      <% include ./partials/lang-switcher %>
+      		<% include ./partials/lang-switcher %>
 
 			<p class="navbar-text"><%= user.email %></p>
 
 			<ul class="nav navbar-nav">
-        <% if (user && user.role === 'admin') { %>
-          <li><a href="/config"><%= getText('settings') %></a></li>
-        <% } %>
+				<% if (user && user.role === 'admin') { %>
+				  <li><a href="/config"><%= getText('settings') %></a></li>
+				<% } %>
 
 				<li><a href="#" id="logout"><%= getText('logout') %></a></li>
 			</ul>
@@ -56,7 +56,15 @@
 </div>
 
 <div id="root" class="root">
-	<img id="image">
+	<img id="image" />
+
+	<div id="link" class="w-100 text-center" style="margin: 100px auto">
+		<a class="h1" href="#" target="_blank"></a>
+	</div>
+
+	<div id="form" class="w-100 text-center" style="margin: 100px auto">
+		<p style="white-space: pre-wrap;"></p>
+	</div>
 </div>
 
 <div id="help" class="modal fade">
@@ -107,7 +115,7 @@
 	window.markupLimit = <%= limit %>;
 	window.activeTaskSetId = "<%= activeTaskSetId %>";
 
-  window.signs = <%- JSON.stringify(frontSigns()) %>;
+  	window.signs = <%- JSON.stringify(frontSigns()) %>;
 </script>
 
 <script src="<%= fromPublic('bundles/assessment.js') %>"></script>

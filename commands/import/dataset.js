@@ -28,7 +28,6 @@ module.exports = (program) => {
 
 			logger.info('Unzip done');
 
-
 			const sitesRaw = await fs.readJson(path.join(tmpPath, 'description.json'));
 
 			// Сохраняем сайты
@@ -36,14 +35,20 @@ module.exports = (program) => {
 				const id = mongoose.Types.ObjectId();
 
 				const screenshotPath = path.join(config.get('mongo.screenshotsPath'), site.dataset, `${id}.jpg`);
-				await fs.mkdirp(path.dirname(screenshotPath));
-				await fs.move(path.join(tmpPath, 'screenshots', site.screenshot), screenshotPath, { overwrite: true });
+				let screenshot = null;
+				if (fs.existsSync(screenshotPath)) {
+					await fs.mkdirp(path.dirname(screenshotPath));
+					await fs.move(path.join(tmpPath, 'screenshots', site.screenshot), screenshotPath, { overwrite: true });
+
+					screenshot = path.relative(config.get('mongo.screenshotsPath'), screenshotPath);
+				}
 
 				return {
 					_id: id,
 					url: site.url,
 					dataset: site.dataset,
-					screenshot: path.relative(config.get('mongo.screenshotsPath'), screenshotPath),
+					screenshot,
+					formText: site.formText || '',
 				};
 			});
 			await Site.create(sites);

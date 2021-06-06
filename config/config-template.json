@@ -14,6 +14,20 @@
         "element": {
           "type": "text"
         }
+      },
+      {
+        "id": "entityMode",
+        "name": "config_props.entityMode",
+        "value": "form",
+        "possibleValues": [
+          "site",
+          "link",
+          "form"
+        ],
+        "format": "String",
+        "element": {
+          "type": "text"
+        }
       }
     ]
   },

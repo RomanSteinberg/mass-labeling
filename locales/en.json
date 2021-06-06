@@ -1,8 +1,12 @@
 {
   "broken_sites": "Broken images",
+  "broken_links": "Broken links",
+  "broken_forms": "Broken forms",
   "unchecked": "Unchecked",
   "check_sites": "Start checking",
   "scored_sites_title": "Image assessment",
+  "scored_links_title": "Link assessment",
+  "scored_forms_title": "Form assessment",
   "get_new_task": "Get new task",
   "users": "Users",
   "stats": "Statistics",
@@ -32,6 +36,8 @@
   "try_variants": "Try the following options:",
   "go_to_main": "Go to the home page",
   "show_broken": "Review broken images once again",
+  "show_broken_links": "Review broken links once again",
+  "show_broken_forms": "Review broken forms once again",
   "screenshot": "Image",
   "check_result": "Assessment results",
   "is_working": "OK",
@@ -79,6 +85,12 @@
   },
   "site_errors": {
     "site_not_found": "Image not found"
+  },
+  "graded_text_errors": {
+    "graded_text_not_found": "Graded text not found"
+  },
+  "graded_form_errors": {
+    "graded_form_not_found": "Graded form not found"
   },
   "task_errors": {
     "bad_markup_request": "Bad request",

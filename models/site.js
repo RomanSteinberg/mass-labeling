@@ -5,34 +5,41 @@ const TaskSet = require('./taskset');
 
 
 const SiteSchema = new mongoose.Schema({
-	url: {
-		type: String,
-		required: true,
-	},
-	dataset: {
-		type: String,
-		required: true,
-	},
-
-	screenshot: {
-		type: String,
-		required: true,
-	},
-
 	status: {
 		type: String,
 		enum: ['active', 'disabled', 'approved'],
 		default: 'active',
 		required: true,
 	},
+
+	dataset: {
+		type: String,
+		required: true,
+	},
+
+	url: {
+		type: String,
+		required: false,
+	},
+
+	screenshot: {
+		type: String,
+		required: false,
+	},
+
+	formText: {
+		type: String,
+		required: false,
+	},
 });
 
 SiteSchema.index({
 	url: 1,
 	dataset: 1,
-}, {
-	unique: true,
 });
+// }, {
+// 	unique: true,
+// });
 
 
 SiteSchema.statics = {

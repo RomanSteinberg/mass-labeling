@@ -1,9 +1,11 @@
-<h1><%= getText('show_broken') %></h1>
+<h1><%= brokenTitle %></h1>
 <table class="table table-striped">
 	<thead>
 		<tr>
 			<th>URL</th>
-			<th><%= getText('screenshot') %></th>
+			<% if (entityMode === 'site') { %>
+				<th><%= getText('screenshot') %></th>
+			<% } %>
 			<th><%= getText('check_result') %></th>
 		</tr>
 	</thead>
@@ -11,14 +13,16 @@
 		<% sites.forEach(site => { %>
 			<tr>
 				<td><a href="<%= site.url %>" target="_blank"><%= site.url %></a></td>
-				<td><a href="/api/site/<%= site.id %>/screenshot" target="_blank"><%= getText('screenshot') %></a></td>
+				<% if (entityMode === 'site') { %>
+					<td><a href="/api/site/<%= site.id %>/screenshot" target="_blank"><%= getText('screenshot') %></a></td>
+				<% } %>
 				<td>
 					<button type="button" class="btn btn-success btn-xs approve" data-id="<%= site.id %>">
-            <%= getText('is_working') %>
-          </button>
+						<%= getText('is_working') %>
+				  	</button>
 					<button type="button" class="btn btn-danger btn-xs disable" data-id="<%= site.id %>">
-            <%= getText('is_broken') %>
-          </button>
+						<%= getText('is_broken') %>
+					</button>
 				</td>
 			</tr>
 		<% }) %>

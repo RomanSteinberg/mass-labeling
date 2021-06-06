@@ -78,7 +78,23 @@ class Design {
 
 		$('#markup-count').text(this.markupCount);
 
-		$('#image').attr('src', `/api/site/${this.task.siteId}/screenshot`);
+		if (this.task.entityMode === 'site') {
+			$('#image')
+				.attr('src', `/api/site/${this.task.siteId}/screenshot`);
+			$('#link').hide();
+			$('#form').hide();
+		} else if (this.task.entityMode === 'link') {
+			$('#image').hide();
+			$('#link > a')
+				.attr('href', this.task.siteUrl)
+				.text(this.task.siteUrl);
+			$('#form').hide();
+		} else if (this.task.entityMode === 'form') {
+			$('#image').hide();
+			$('#link').hide();
+			$('#form > p')
+				.text(this.task.siteFormText);
+		}
 
 		this.answer = null;
 	}
