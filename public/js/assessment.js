@@ -248,13 +248,13 @@ class Design {
 				event.preventDefault();
 
 				if (this.mode === 'form') {
-					if (this.answer != null) {
+					if (this.answer) {
 						this.save();
 					} else {
 						alert(signs.no_mark_specified);
 					}
 				} else if (this.mode === 'link') {
-					if (this.answerCode != null && this.answerAlgorithm != null) {
+					if (this.answerCode && this.answerAlgorithm) {
 						this.save();
 					} else {
 						alert(signs.no_mark_specified);
@@ -263,7 +263,7 @@ class Design {
 					// т.е. this.mode = 'site'
 					// if внутри ветки else для читаемости!
 					// eslint-disable-next-line no-lonely-if
-					if (this.answer != null) {
+					if (this.answer) {
 						this.save();
 					} else {
 						alert(signs.no_mark_specified);
