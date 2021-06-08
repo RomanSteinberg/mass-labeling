@@ -76,6 +76,17 @@ class Design {
 
 				if (this.mode === 'form') {
 					$('#answer-form').text(this.answer || 'X');
+
+					const $mark = $(`<div class="mark">${this.answer || 'X'}</div>`);
+					$mark.appendTo('body');
+					$mark.animate({
+						width: 0,
+						height: 0,
+						margin: 0,
+						opacity: 0,
+						fontSize: 0,
+						lineHeight: 0,
+					}, 1000, () => $mark.remove());
 				} else if (this.mode === 'link') {
 					if (this.keyupCounter % 2 === 0) {
 						$('#answer-code').text(this.answer || 'X');
@@ -85,23 +96,34 @@ class Design {
 						this.answerAlgorithm = this.answer;
 					}
 
+					const $mark = $(`<div class="mark">${this.answer || 'X'}</div>`);
+					$mark.appendTo('body');
+					$mark.animate({
+						width: 0,
+						height: 0,
+						margin: 0,
+						opacity: 0,
+						fontSize: 0,
+						lineHeight: 0,
+					}, 1000, () => $mark.remove());
+
 					// Сброс
 					this.answer = null;
 				} else {
 					// т.е. this.mode = 'site'
 					$('#answer').text(this.answer || 'X');
-				}
 
-				const $mark = $(`<div class="mark">${this.answer || 'X'}</div>`);
-				$mark.appendTo('body');
-				$mark.animate({
-					width: 0,
-					height: 0,
-					margin: 0,
-					opacity: 0,
-					fontSize: 0,
-					lineHeight: 0,
-				}, 1000, () => $mark.remove());
+					const $mark = $(`<div class="mark">${this.answer || 'X'}</div>`);
+					$mark.appendTo('body');
+					$mark.animate({
+						width: 0,
+						height: 0,
+						margin: 0,
+						opacity: 0,
+						fontSize: 0,
+						lineHeight: 0,
+					}, 1000, () => $mark.remove());
+				}
 			}
 		});
 
