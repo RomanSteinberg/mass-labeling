@@ -12,7 +12,27 @@ window.jQuery = $;
 // Texts from back-end
 const { signs, activeTaskSetId } = window;
 
+// Вставить в элемент DOM $('#form') группу полей 'Опыт работы'
+const addProjectExperienceFormGroupItemToDOM = () => {
+	const formProjectExperienceElem = $('#form > #project-experience');
+	if (! formProjectExperienceElem.length) {
+		return;
+	}
 
+	formProjectExperienceElem.append('' +
+		'<div class="well well-sm project-experience-item" style="margin-bottom: 20px">' +
+		'	<input type="text" class="form-control company-name" style="margin-bottom: 10px" placeholder="Company name (Название компании)">' +
+		'	<input type="text" class="form-control position" style="margin-bottom: 10px" placeholder="Position (Должность)">' +
+		'' +
+		'	<button type="button" class="btn btn-danger removeProjectExperienceFormGroupItemToDOM">\n' +
+		'  		<span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Удалить' +
+		'	</button>' +
+		'</div>' +
+		'');
+};
+
+
+// DOM callbacks
 $('#logout').click((event) => {
 	event.preventDefault();
 
@@ -22,6 +42,13 @@ $('#logout').click((event) => {
 		});
 });
 
+$('.addProjectExperienceFormGroupItemToDOM').click(() => {
+	addProjectExperienceFormGroupItemToDOM();
+});
+
+$(document).on('click', '.removeProjectExperienceFormGroupItemToDOM', function () {
+	$(this).parent().remove();
+});
 
 class Design {
 	constructor(markupCount, markupLimit) {

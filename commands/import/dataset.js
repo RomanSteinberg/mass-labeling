@@ -48,7 +48,7 @@ module.exports = (program) => {
 					url: site.url,
 					dataset: site.dataset,
 					screenshot,
-					formText: site.formText || '',
+					formFullName: site.formFullName || '',
 				};
 			});
 			await Site.create(sites);

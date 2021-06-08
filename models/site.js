@@ -27,9 +27,9 @@ const SiteSchema = new mongoose.Schema({
 		required: false,
 	},
 
-	formText: {
-		type: String,
-		required: false,
+	projectExperience: {
+		type: mongoose.Schema.ObjectId,
+		required: true,
 	},
 });
 
