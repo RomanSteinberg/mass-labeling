@@ -102,20 +102,45 @@ router.post('/answer', async (req, res, next) => {
 			throw new Error('active_taskset_changed');
 		}
 
-		const task = await Task.getNew({
-			siteId: req.body.siteId,
-			answer: Number(req.body.answer),
-			userId: req.user.id,
-		});
+		const entityMode = config.get('boot.entityMode');
 
-		logger.info({
-			taskId: task.id,
-			siteId: task.siteId,
-			answer: task.answer,
-			userId: task.userId,
-		}, 'answerTask');
+		if (entityMode === 'form') {
+			// TODO...
+		} else if (entityMode === 'link') {
+			const task = await Task.getNewLink({
+				siteId: req.body.siteId,
+				answerCode: Number(req.body.answerCode),
+				answerAlgorithm: Number(req.body.answerAlgorithm),
+				userId: req.user.id,
+			});
 
-		res.api.response(task.id);
+			logger.info({
+				taskId: task.id,
+				siteId: task.siteId,
+				answerCode: task.answerCode,
+				answerAlgorithm: task.answerAlgorithm,
+				userId: task.userId,
+			}, 'answerLinkTask');
+
+			res.api.response(task.id);
+		} else {
+			// entityMode == site
+
+			const task = await Task.getNew({
+				siteId: req.body.siteId,
+				answer: Number(req.body.answer),
+				userId: req.user.id,
+			});
+
+			logger.info({
+				taskId: task.id,
+				siteId: task.siteId,
+				answer: task.answer,
+				userId: task.userId,
+			}, 'answerSiteTask');
+
+			res.api.response(task.id);
+		}
 	} catch (err) {
 		// eslint-disable-next-line no-underscore-dangle
 		err.message = req.__(err.message);

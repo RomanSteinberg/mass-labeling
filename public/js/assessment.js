@@ -5,6 +5,7 @@ import Request from './request';
 
 import '../css/assessment.css';
 
+
 window.$ = $;
 window.jQuery = $;
 
@@ -26,6 +27,23 @@ class Design {
 	constructor(markupCount, markupLimit) {
 		this.markupCount = markupCount;
 		this.markupLimit = markupLimit === Infinity ? 0 : markupLimit;
+
+		// Потребуется в this.mode = 'link':
+		// - четное нажатие для оценки кода;
+		// - нечетное нажатие для оценки алгоритма.
+		// Начинать с единицы!
+		this.keyupCounter = 1;
+
+		this.mode = null;
+		// Определяем в каком режиме запущен фронт
+		if ($('#answer-form').length) {
+			this.mode = 'form';
+		} else if ($('#answer-code').length && $('#answer-algorithm').length) {
+			this.mode = 'link';
+		} else {
+			// Значит на странице существует элемент $('#answer')
+			this.mode = 'site';
+		}
 
 		$(window).on('keyup', (event) => {
 			let { keyCode } = event;
@@ -54,7 +72,25 @@ class Design {
 					this.answer = keyCode - 48;
 				}
 
-				$('#answer').text(this.answer || 'X');
+				this.keyupCounter += 1;
+
+				if (this.mode === 'form') {
+					$('#answer-form').text(this.answer || 'X');
+				} else if (this.mode === 'link') {
+					if (this.keyupCounter % 2 === 0) {
+						$('#answer-code').text(this.answer || 'X');
+						this.answerCode = this.answer;
+					} else {
+						$('#answer-algorithm').text(this.answer || 'X');
+						this.answerAlgorithm = this.answer;
+					}
+
+					// Сброс
+					this.answer = null;
+				} else {
+					// т.е. this.mode = 'site'
+					$('#answer').text(this.answer || 'X');
+				}
 
 				const $mark = $(`<div class="mark">${this.answer || 'X'}</div>`);
 				$mark.appendTo('body');
@@ -74,7 +110,16 @@ class Design {
 
 
 	show() {
-		$('#answer').text('-');
+		if (this.mode === 'form') {
+			$('#answer').text('-');
+		} else if (this.mode === 'link') {
+			$('#answer-code').text('-');
+			$('#answer-algorithm').text('-');
+		} else {
+			// т.е. this.mode = 'site'
+			$('#answer').text('-');
+		}
+
 
 		$('#markup-count').text(this.markupCount);
 
@@ -110,6 +155,9 @@ class Design {
 
 		Request.post('/api/assessment/create', { data: { activeTaskSetId } })
 			.then((task) => {
+				// Сброс this.keyupCounter
+				this.keyupCounter = 1;
+
 				// User has no more tasks
 				if (task.limitReached) {
 					$(window).off('keyup');
@@ -131,15 +179,32 @@ class Design {
 
 	// Сохранение выбора пользователя
 	save() {
-		Request.post('/api/assessment/answer', {
-			data: {
+		let payload = {};
+
+		if (this.mode === 'form') {
+			payload = {
 				activeTaskSetId,
 				siteId: this.task.siteId,
 				answer: this.answer,
-			},
-		})
+			};
+		} else if (this.mode === 'link') {
+			payload = {
+				activeTaskSetId,
+				siteId: this.task.siteId,
+				answerCode: this.answerCode,
+				answerAlgorithm: this.answerAlgorithm,
+			};
+		} else {
+			// т.е. this.mode = 'site'
+			payload = {
+				activeTaskSetId,
+				siteId: this.task.siteId,
+				answer: this.answer,
+			};
+		}
+
+		Request.post('/api/assessment/answer', { data: payload })
 			.then((taskId) => {
-				this.markupCount++;
 				this.task.id = taskId;
 				this.prev = this.task;
 				this.next();
@@ -159,6 +224,9 @@ class Design {
 
 		Request.post(`/api/assessment/${this.prev.id}/undo`, { data: { activeTaskSetId } })
 			.then(() => {
+				// Сброс this.keyupCounter
+				this.keyupCounter = 1;
+
 				this.markupCount--;
 				this.task = this.prev;
 				this.prev = null;
@@ -179,10 +247,27 @@ class Design {
 			if (event.keyCode === keys.save) {
 				event.preventDefault();
 
-				if (this.answer != null) {
-					this.save();
+				if (this.mode === 'form') {
+					if (this.answer != null) {
+						this.save();
+					} else {
+						alert(signs.no_mark_specified);
+					}
+				} else if (this.mode === 'link') {
+					if (this.answerCode != null && this.answerAlgorithm != null) {
+						this.save();
+					} else {
+						alert(signs.no_mark_specified);
+					}
 				} else {
-					alert(signs.no_mark_specified);
+					// т.е. this.mode = 'site'
+					// if внутри ветки else для читаемости!
+					// eslint-disable-next-line no-lonely-if
+					if (this.answer != null) {
+						this.save();
+					} else {
+						alert(signs.no_mark_specified);
+					}
 				}
 			}
 

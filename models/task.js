@@ -18,6 +18,20 @@ const TaskSchema = new mongoose.Schema({
 		required: true,
 	},
 
+	answerCode: {
+		type: Number,
+		min: 0,
+		max: 10,
+		required: false,
+	},
+
+	answerAlgorithm: {
+		type: Number,
+		min: 0,
+		max: 10,
+		required: false,
+	},
+
 	userId: {
 		type: mongoose.Schema.ObjectId,
 		required: true,
@@ -97,6 +111,48 @@ TaskSchema.statics = {
 		return this.create({
 			siteId,
 			answer,
+			userId,
+			taskSetId: activeTaskSet._id,
+		});
+	},
+
+	// Set mark for link
+	async getNewLink({
+		siteId, answerCode, answerAlgorithm, userId,
+	}) {
+		const activeTaskSet = await TaskSet.getCurrentActive();
+
+		if (! activeTaskSet) {
+			throw new Error('no_active_tasks');
+		}
+
+		const limit = activeTaskSet.assessmentLimit;
+		const showRandomly = activeTaskSet.randomSelection;
+
+		const count = await this.countByUserId(userId, true);
+
+		if (limit && count >= limit && showRandomly) {
+			throw new Error('task_errors.limit_reached');
+		}
+
+		const site = await Site.findById(siteId);
+
+		if (site.status === 'disabled') {
+			throw new Error('task_errors.bad_markup_request');
+		}
+
+		if (site.status === 'approved' && answerCode === 0 && answerAlgorithm === 0) {
+			throw new Error('task_errors.bad_markup_request');
+		}
+
+		// Костыль!!!
+		const answer = 1;
+
+		return this.create({
+			siteId,
+			answer,
+			answerCode,
+			answerAlgorithm,
 			userId,
 			taskSetId: activeTaskSet._id,
 		});

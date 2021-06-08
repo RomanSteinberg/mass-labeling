@@ -51,7 +51,23 @@
 
 <div class="navbar navbar-inverse navbar-static-top">
 	<div class="container-fluid">
-		<p id="answer" class="answer navbar-text"></p>
+		<% if (entityMode === 'site') { %>
+			<p id="answer" class="answer navbar-text"></p>
+		<% } %>
+
+		<% if (entityMode === 'form') { %>
+			<p id="answer" class="answer navbar-text"></p>
+		<% } %>
+
+		<% if (entityMode === 'link') { %>
+				<span class="answer navbar-text">
+					Код: <span id="answer-code"></span>
+				</span>
+
+				<span class="answer navbar-text">
+					Алгоритм: <span id="answer-algorithm"></span>
+				</span>
+		<% } %>
 	</div>
 </div>
 
