@@ -271,6 +271,7 @@ class Design {
 
 		Request.post('/api/assessment/answer', { data: payload })
 			.then((taskId) => {
+				this.markupCount++;
 				this.task.id = taskId;
 				this.prev = this.task;
 				this.next();
@@ -314,13 +315,13 @@ class Design {
 				event.preventDefault();
 
 				if (this.mode === 'form') {
-					if (this.answer) {
+					if (this.answer != null) {
 						this.save();
 					} else {
 						alert(signs.no_mark_specified);
 					}
 				} else if (this.mode === 'link') {
-					if (this.answerCode && this.answerAlgorithm) {
+					if ((this.answerCode != null) && (this.answerAlgorithm != null)) {
 						this.save();
 					} else {
 						alert(signs.no_mark_specified);
@@ -329,7 +330,7 @@ class Design {
 					// т.е. this.mode = 'site'
 					// if внутри ветки else для читаемости!
 					// eslint-disable-next-line no-lonely-if
-					if (this.answer) {
+					if (this.answer != null) {
 						this.save();
 					} else {
 						alert(signs.no_mark_specified);
