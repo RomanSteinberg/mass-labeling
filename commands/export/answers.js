@@ -27,13 +27,12 @@ module.exports = (program) => {
 
 		logger.info('Users done');
 
-
 		// Получаем сайты
 		const sitesFilter = {
 			...Site.filter.allowedStatuses,
 		};
 
-		if (config.get('cliExport.datasets').length) {
+		if (config.get('cliExport.datasets')) {
 			sitesFilter.dataset = {
 				$in: config.get('cliExport.datasets'),
 			};

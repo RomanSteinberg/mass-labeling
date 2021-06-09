@@ -33,7 +33,7 @@ module.exports = (program) => {
 			...Site.filter.allowedStatuses,
 		};
 
-		if (config.get('cliExport.datasets').length) {
+		if (config.get('cliExport.datasets')) {
 			sitesFilter.dataset = {
 				$in: config.get('cliExport.datasets'),
 			};
@@ -51,6 +51,7 @@ module.exports = (program) => {
 		// Получаем ответы для всех сайтов
 		const tasks = await Task.find({
 			siteId: { $in: sites.map(site => site.id) },
+			answer: { $ne: 0 },
 			answerCode: { $ne: 0 },
 			answerAlgorithm: { $ne: 0 },
 		}).lean();
