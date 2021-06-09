@@ -27,10 +27,10 @@ const SiteSchema = new mongoose.Schema({
 		required: false,
 	},
 
-	projectExperience: {
-		type: mongoose.Schema.ObjectId,
-		required: true,
-	},
+	// projectExperience: {
+	// 	type: mongoose.Schema.ObjectId,
+	// 	required: true,
+	// },
 });
 
 SiteSchema.index({

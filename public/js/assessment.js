@@ -14,15 +14,17 @@ const { signs, activeTaskSetId } = window;
 
 // Вставить в элемент DOM $('#form') группу полей 'Опыт работы'
 const addProjectExperienceFormGroupItemToDOM = () => {
-	const formProjectExperienceElem = $('#form > #project-experience');
+	const formProjectExperienceElem = $('#form > #projectExperienceGroup');
 	if (! formProjectExperienceElem.length) {
 		return;
 	}
 
 	formProjectExperienceElem.append('' +
-		'<div class="well well-sm project-experience-item" style="margin-bottom: 20px">' +
-		'	<input type="text" class="form-control company-name" style="margin-bottom: 10px" placeholder="Company name (Название компании)">' +
-		'	<input type="text" class="form-control position" style="margin-bottom: 10px" placeholder="Position (Должность)">' +
+		'<div class="well well-sm projectExperienceItem" style="margin-bottom: 20px">' +
+		'	<input type="text" class="form-control companyNameField" style="margin-bottom: 10px" placeholder="Company name (Название компании)" />' +
+		'	<input type="text" class="form-control positionField" style="margin-bottom: 10px" placeholder="Position (Должность)" />' +
+		'	<input type="date" class="form-control startDateField" style="margin-bottom: 10px" placeholder="Start date (Начало работы в компании)" />' +
+		'	<input type="date" class="form-control endDateField" style="margin-bottom: 10px" placeholder="End date (Конец работы в компании)" />' +
 		'' +
 		'	<button type="button" class="btn btn-danger removeProjectExperienceFormGroupItemToDOM">\n' +
 		'  		<span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Удалить' +
@@ -72,7 +74,22 @@ class Design {
 			this.mode = 'site';
 		}
 
+		this.focusedInput = false;
+		// Запоминаем весит ли фокус на полях формы или нет нужно чтоб понять оценивать или нет (по нажатию клавиш цифр)
+		$('input, textarea, select').focus(() => {
+			// Тут обязательно юзаем функцию ссылочного типа, чтою this был экземпляр класса Design
+			this.focusedInput = true;
+		}).blur(() => {
+			// Тут обязательно юзаем функцию ссылочного типа, чтою this был экземпляр класса Design
+			this.focusedInput = false;
+		});
+
 		$(window).on('keyup', (event) => {
+			// Проверка находимся ли мы в режиме редактирования поля или нет
+			if (this.focusedInput) {
+				return;
+			}
+
 			let { keyCode } = event;
 			const xKeyCode = 'X'.charCodeAt(0);
 

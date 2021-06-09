@@ -113,7 +113,7 @@ const PersonFormSchema = new mongoose.Schema({
 	},
 
 	// Образование
-	Educations: [EducationSchema],
+	educations: [EducationSchema],
 
 	// Профессиональные навыки
 	professionalSkills: [String],
