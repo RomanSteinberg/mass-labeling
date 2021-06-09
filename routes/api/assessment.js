@@ -69,7 +69,6 @@ router.post('/create', async (req, res, next) => {
 				siteId: site.id,
 				siteStatus: site.status,
 				siteUrl: site.url,
-				siteFormText: site.formText || '',
 				entityMode,
 			});
 		} else {
@@ -137,7 +136,7 @@ router.post('/answer', async (req, res, next) => {
 				siteId: task.siteId,
 				answer: task.answer,
 				userId: task.userId,
-			}, 'answerSiteTask');
+			}, 'answerTask');
 
 			res.api.response(task.id);
 		}
