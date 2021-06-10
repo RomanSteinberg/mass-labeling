@@ -49,13 +49,14 @@ const addProjectGroupItemToDOM = (buttonElem) => {
 	const formProjectsGroupElem = buttonElem.parent();
 
 	formProjectsGroupElem.append('' +
-		'<div class="well well-sm projectExperienceItem" style="margin-bottom: 20px">' +
+		'<div class="well well-sm projectItem" style="margin-bottom: 20px">' +
 		'	<input type="text" class="form-control descriptionField" style="margin-bottom: 10px" placeholder="Description (Описание проекта)" />' +
 		'	<input type="text" class="form-control responsibilityField" style="margin-bottom: 10px" placeholder="Responsibility (Обязанности)" />' +
-		'	<input type="number" class="form-control projectLengthField" style="margin-bottom: 10px" placeholder="ProjectLength (Длительность проекта)" />' +
+		'	<input type="number" class="form-control projectLengthField" style="margin-bottom: 10px"' +
+		'			placeholder="ProjectLength (Длительность проекта месяцев)" />' +
 		'' +
 		'	<h4 style="margin-bottom: 10px">Технологии</h4>' +
-		'	<div id="technologiesGroup" style="margin-bottom: 25px">' +
+		'	<div class="technologiesGroup" style="margin-bottom: 25px">' +
 		'		<button type="button" class="btn btn-primary addTechnologiesGroupItemToDOM" style="margin-bottom: 10px">' +
 		'			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Добавить' +
 		'		</button>' +
@@ -74,7 +75,7 @@ const addTechnologiesGroupItemToDOM = (buttonElem) => {
 
 	formTechnologiesGroupElem.append('' +
 		'<div class="input-group" style="margin-bottom: 10px">' +
-		'	<input type="text" class="form-control" placeholder="Технология">' +
+		'	<input type="text" class="form-control technologyField" placeholder="Технология">' +
 		'	<span class="input-group-btn">' +
 		'		<button class="btn btn-danger removeTechnologiesGroupItemToDOM" type="button">' +
 		'			<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>' +
@@ -130,7 +131,7 @@ const addForeignLanguagesGroupItemToDOM = () => {
 	}
 
 	formForeignLanguagesGroupElem.append('' +
-		'<div class="well well-sm educationsItem" style="margin-bottom: 20px">' +
+		'<div class="well well-sm foreignLanguagesItem" style="margin-bottom: 20px">' +
 		'	<input type="text" class="form-control languageField" style="margin-bottom: 10px" placeholder="Language (Название языка)" />' +
 		'	<input type="text" class="form-control levelOfProficiencyField" ' +
 		'			style="margin-bottom: 10px" placeholder="Level Of Proficiency (Уровень владения)" />' +
@@ -296,6 +297,100 @@ $(document).on('click', '.removeSocialNetworksGroupItemToDOM', function () {
 		.parent()
 		.remove();
 });
+
+// ----
+
+// Сериализация данных формы
+const getSerializedDataOfForm = () => {
+	const serializedData = {
+		fullExperience: $('.fullExperienceField').val(),
+		expectedSalary: $('.expectedSalaryField').val(),
+		regionWorkLocation: $('.regionWorkLocationField').val(),
+		remote: $('.remoteField').is(':checked'),
+		citizenship: $('.citizenshipField').val(),
+		employmentType: $('.employmentTypeField').val(),
+		projectExperiences: [],
+		educations: [],
+		professionalSkills: [],
+		foreignLanguages: [],
+		linksToOpenSources: [],
+		otherProjects: [],
+		socialNetworks: [],
+	};
+
+	// Проходимся по 'Опыт работы'
+	$('#projectExperienceGroup .projectExperienceItem').each(function () {
+		const projectExperience = {
+			companyName: $(this).find('.companyNameField').val(),
+			position: $(this).find('.positionField').val(),
+			startDate: $(this).find('.startDateField').val(),
+			endDate: $(this).find('.endDateField').val(),
+			projects: [],
+		};
+
+		// Проходимся по 'Опыт работы' ---> Проекты
+		$(this).find('.projectItem').each(function () {
+			const project = {
+				description: $(this).find('.descriptionField').val(),
+				responsibility: $(this).find('.responsibilityField').val(),
+				projectLength: $(this).find('.projectLengthField').val(),
+				technologies: [],
+			};
+			projectExperience.projects.push(project);
+
+			// Проходимся по 'Опыт работы' ---> Проекты ---> Технологии
+			$(this).find('.projectItem').find('.technologiesGroup').each(function () {
+				project.technologies.push($(this).find('.technologyField').val());
+			});
+		});
+
+		serializedData.projectExperiences.push(projectExperience);
+	});
+
+	// Проходимся по 'Образование'
+	$('#educationGroup .educationsItem').each(function () {
+		const education = {
+			universityName: $(this).find('.universityNameField').val(),
+			degree: $(this).find('.degreeField').val(),
+		};
+
+		serializedData.educations.push(education);
+	});
+
+	// Проходимся по 'Профессиональные навыки'
+	$('#professionalSkillGroup input').each(function () {
+		serializedData.professionalSkills.push($(this).val());
+	});
+
+	// Проходимся по 'Иностранные языки'
+	$('#foreignLanguagesGroup .foreignLanguagesItem').each(function () {
+		const foreignLang = {
+			language: $(this).find('.languageField').val(),
+			levelOfProficiency: $(this).find('.levelOfProficiencyField').val(),
+		};
+
+		serializedData.foreignLanguages.push(foreignLang);
+	});
+
+	// Проходимся по 'Ссылки на open source проекты'
+	$('#linksToOpenSourceGroup input').each(function () {
+		serializedData.linksToOpenSources.push($(this).val());
+	});
+
+	// Проходимся по 'Сторонние проекты'
+	$('#otherProjectsGroup input').each(function () {
+		serializedData.otherProjects.push($(this).val());
+	});
+
+	// Проходимся по 'Ссылки на социальные сети'
+	$('#socialNetworksGroup input').each(function () {
+		serializedData.socialNetworks.push($(this).val());
+	});
+
+	console.log('serializedData', serializedData);
+
+	return serializedData;
+};
 
 // ----
 
@@ -497,10 +592,13 @@ class Design {
 		let payload = {};
 
 		if (this.mode === 'form') {
+			const serializedDataOfForm = getSerializedDataOfForm();
+
 			payload = {
 				activeTaskSetId,
 				siteId: this.task.siteId,
 				answer: this.answer,
+				serializedDataOfForm,
 			};
 		} else if (this.mode === 'link') {
 			payload = {

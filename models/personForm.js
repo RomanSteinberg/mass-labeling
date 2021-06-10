@@ -27,13 +27,11 @@ const ProjectExperienceSchema = new mongoose.Schema({
 	// Название компании
 	companyName: {
 		type: String,
-		required: true,
 	},
 
 	// Должность
 	position: {
 		type: String,
-		required: true,
 	},
 
 	// Начало работы в компании
@@ -55,7 +53,6 @@ const ForeignLanguageSchema = new mongoose.Schema({
 	// Название языка
 	language: {
 		type: String,
-		required: true,
 	},
 
 	// Уровень владения
