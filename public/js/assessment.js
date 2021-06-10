@@ -14,21 +14,139 @@ const { signs, activeTaskSetId } = window;
 
 // Вставить в элемент DOM $('#form') группу полей 'Опыт работы'
 const addProjectExperienceFormGroupItemToDOM = () => {
-	const formProjectExperienceElem = $('#form > #projectExperienceGroup');
-	if (! formProjectExperienceElem.length) {
+	const formProjectExperienceGroupElem = $('#form > form > #projectExperienceGroup');
+	if (! formProjectExperienceGroupElem.length) {
 		return;
 	}
 
-	formProjectExperienceElem.append('' +
+	formProjectExperienceGroupElem.append('' +
 		'<div class="well well-sm projectExperienceItem" style="margin-bottom: 20px">' +
 		'	<input type="text" class="form-control companyNameField" style="margin-bottom: 10px" placeholder="Company name (Название компании)" />' +
 		'	<input type="text" class="form-control positionField" style="margin-bottom: 10px" placeholder="Position (Должность)" />' +
+		'	<p>Start date (Начало работы в компании)</p>' +
 		'	<input type="date" class="form-control startDateField" style="margin-bottom: 10px" placeholder="Start date (Начало работы в компании)" />' +
+		'	<p>End date (Конец работы в компании)</p>' +
 		'	<input type="date" class="form-control endDateField" style="margin-bottom: 10px" placeholder="End date (Конец работы в компании)" />' +
 		'' +
 		'	<button type="button" class="btn btn-danger removeProjectExperienceFormGroupItemToDOM">\n' +
 		'  		<span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Удалить' +
 		'	</button>' +
+		'</div>' +
+		'');
+};
+
+
+// Вставить в элемент DOM $('#form') группу полей 'Образование'
+const addEducationsGroupItemToDOM = () => {
+	const formEducationsGroupElem = $('#form > form > #educationGroup');
+	if (! formEducationsGroupElem.length) {
+		return;
+	}
+
+	formEducationsGroupElem.append('' +
+		'<div class="well well-sm educationsItem" style="margin-bottom: 20px">' +
+		'	<input type="text" class="form-control universityNameField" style="margin-bottom: 10px" placeholder="University name (Название университета)" />' +
+		'	<input type="text" class="form-control degreeField" style="margin-bottom: 10px" placeholder="Degree (Степень)" />' +
+		'' +
+		'	<button type="button" class="btn btn-danger removeEducationsGroupItemToDOM">\n' +
+		'  		<span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Удалить' +
+		'	</button>' +
+		'</div>' +
+		'');
+};
+
+// Вставить в элемент DOM $('#form') группу полей 'Профессиональные навыки'
+const addProfessionalSkillGroupItemToDOM = () => {
+	const formProfessionalSkillGroupElem = $('#form > form > #professionalSkillGroup');
+	if (! formProfessionalSkillGroupElem.length) {
+		return;
+	}
+
+	formProfessionalSkillGroupElem.append('' +
+		'<div class="input-group" style="margin-bottom: 10px">' +
+		'	<input type="text" class="form-control" placeholder="Профессиональный навык">' +
+		'	<span class="input-group-btn">' +
+		'		<button class="btn btn-danger removeProfessionalSkillItemToDOM" type="button">' +
+		'			<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>' +
+		'		</button>' +
+		'	</span>\n' +
+		'</div>' +
+		'');
+};
+
+// Вставить в элемент DOM $('#form') группу полей 'Образование'
+const addForeignLanguagesGroupItemToDOM = () => {
+	const formForeignLanguagesGroupElem = $('#form > form > #foreignLanguagesGroup');
+	if (! formForeignLanguagesGroupElem.length) {
+		return;
+	}
+
+	formForeignLanguagesGroupElem.append('' +
+		'<div class="well well-sm educationsItem" style="margin-bottom: 20px">' +
+		'	<input type="text" class="form-control languageField" style="margin-bottom: 10px" placeholder="Language (Название языка)" />' +
+		'	<input type="text" class="form-control levelOfProficiencyField" ' +
+		'			style="margin-bottom: 10px" placeholder="Level Of Proficiency (Уровень владения)" />' +
+		'' +
+		'	<button type="button" class="btn btn-danger removeForeignLanguagesGroupItemToDOM">\n' +
+		'  		<span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Удалить' +
+		'	</button>' +
+		'</div>' +
+		'');
+};
+
+// Вставить в элемент DOM $('#form') группу полей 'Ссылки на open source проекты'
+const addLinksToOpenSourceGroupItemToDOM = () => {
+	const formLinksToOpenSourceGroupElem = $('#form > form > #linksToOpenSourceGroup');
+	if (! formLinksToOpenSourceGroupElem.length) {
+		return;
+	}
+
+	formLinksToOpenSourceGroupElem.append('' +
+		'<div class="input-group" style="margin-bottom: 10px">' +
+		'	<input type="text" class="form-control" placeholder="Ссылка на open source проект">' +
+		'	<span class="input-group-btn">' +
+		'		<button class="btn btn-danger removeLinksToOpenSourceGroupItemToDOM" type="button">' +
+		'			<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>' +
+		'		</button>' +
+		'	</span>\n' +
+		'</div>' +
+		'');
+};
+
+// Вставить в элемент DOM $('#form') группу полей 'Сторонние проекты'
+const addOtherProjectsGroupItemToDOM = () => {
+	const formOtherProjectsGroupElem = $('#form > form > #otherProjectsGroup');
+	if (! formOtherProjectsGroupElem.length) {
+		return;
+	}
+
+	formOtherProjectsGroupElem.append('' +
+		'<div class="input-group" style="margin-bottom: 10px">' +
+		'	<input type="text" class="form-control" placeholder="Сторонний проект">' +
+		'	<span class="input-group-btn">' +
+		'		<button class="btn btn-danger removeOtherProjectsGroupItemToDOM" type="button">' +
+		'			<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>' +
+		'		</button>' +
+		'	</span>\n' +
+		'</div>' +
+		'');
+};
+
+// Вставить в элемент DOM $('#form') группу полей 'Ссылки на социальные сети'
+const addSocialNetworksGroupItemToDOM = () => {
+	const formSocialNetworksGroupElem = $('#form > form > #socialNetworksGroup');
+	if (! formSocialNetworksGroupElem.length) {
+		return;
+	}
+
+	formSocialNetworksGroupElem.append('' +
+		'<div class="input-group" style="margin-bottom: 10px">' +
+		'	<input type="text" class="form-control" placeholder="Ссылки на социальные сети">' +
+		'	<span class="input-group-btn">' +
+		'		<button class="btn btn-danger removeSocialNetworksGroupItemToDOM" type="button">' +
+		'			<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>' +
+		'		</button>' +
+		'	</span>\n' +
 		'</div>' +
 		'');
 };
@@ -48,8 +166,68 @@ $('.addProjectExperienceFormGroupItemToDOM').click(() => {
 	addProjectExperienceFormGroupItemToDOM();
 });
 
+$('.addEducationsGroupItemToDOM').click(() => {
+	addEducationsGroupItemToDOM();
+});
+
+$('.addProfessionalSkillGroupItemToDOM').click(() => {
+	addProfessionalSkillGroupItemToDOM();
+});
+
+$('.addForeignLanguagesGroupItemToDOM').click(() => {
+	addForeignLanguagesGroupItemToDOM();
+});
+
+$('.addLinksToOpenSourceGroupItemToDOM').click(() => {
+	addLinksToOpenSourceGroupItemToDOM();
+});
+
+$('.addOtherProjectsGroupItemToDOM').click(() => {
+	addOtherProjectsGroupItemToDOM();
+});
+
+$('.addSocialNetworksGroupItemToDOM').click(() => {
+	addSocialNetworksGroupItemToDOM();
+});
+
 $(document).on('click', '.removeProjectExperienceFormGroupItemToDOM', function () {
 	$(this).parent().remove();
+});
+
+$(document).on('click', '.removeEducationsGroupItemToDOM', function () {
+	$(this).parent().remove();
+});
+
+$(document).on('click', '.removeProfessionalSkillItemToDOM', function () {
+	$(this)
+		.parent()
+		.parent()
+		.remove();
+});
+
+$(document).on('click', '.removeForeignLanguagesGroupItemToDOM', function () {
+	$(this).parent().remove();
+});
+
+$(document).on('click', '.removeLinksToOpenSourceGroupItemToDOM', function () {
+	$(this)
+		.parent()
+		.parent()
+		.remove();
+});
+
+$(document).on('click', '.removeOtherProjectsGroupItemToDOM', function () {
+	$(this)
+		.parent()
+		.parent()
+		.remove();
+});
+
+$(document).on('click', '.removeSocialNetworksGroupItemToDOM', function () {
+	$(this)
+		.parent()
+		.parent()
+		.remove();
 });
 
 class Design {
@@ -177,7 +355,7 @@ class Design {
 
 	show() {
 		if (this.mode === 'form') {
-			$('#answer').text('-');
+			$('#answer-form').text('-');
 		} else if (this.mode === 'link') {
 			$('#answer-code').text('-');
 			$('#answer-algorithm').text('-');
@@ -203,8 +381,8 @@ class Design {
 		} else if (this.task.entityMode === 'form') {
 			$('#image').hide();
 			$('#link').hide();
-			$('#form > p')
-				.text(this.task.siteFormText);
+			$('#form > #formTitle')
+				.text(this.task.siteUrl);
 		}
 
 		this.answer = null;

@@ -56,7 +56,7 @@
 		<% } %>
 
 		<% if (entityMode === 'form') { %>
-			<p id="answer" class="answer navbar-text"></p>
+			<p id="answer-form" class="answer navbar-text"></p>
 		<% } %>
 
 		<% if (entityMode === 'link') { %>
@@ -78,13 +78,13 @@
 		<a class="h1" href="#" target="_blank"></a>
 	</div>
 
-	<div id="form" class="w-100 text-center" style="margin: 100px auto; max-width: 460px">
-		<p style="white-space: pre-wrap;"></p>
+	<div id="form" class="w-100" style="margin: 50px auto; max-width: 460px">
+		<h2 id="formTitle" style="white-space: pre-wrap; margin-bottom: 25px"></h2>
 
 		<!-- Форма -->
-		<form id="form">
+		<form>
 			<!-- Группа полей 'Опыт работы (Project experience)' -->
-			<h1 style="margin-bottom: 10px">Опыт работы</h1>
+			<h3 style="margin-bottom: 10px">Опыт работы</h3>
 			<div id="projectExperienceGroup" style="margin-bottom: 25px">
 				<button type="button" class="btn btn-primary addProjectExperienceFormGroupItemToDOM" style="margin-bottom: 10px">
 					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Добавить
@@ -123,27 +123,63 @@
 			<!-- /Гражданство -->
 
 			<!-- Занятость -->
-			<div id="EmploymentTypeGroup" style="margin-bottom: 25px">
+			<div id="employmentTypeGroup" style="margin-bottom: 25px">
 				<input type="text" class="form-control citizenshipField" style="margin-bottom: 10px" placeholder="EmploymentType (Занятость)" />
 			</div>
 			<!-- /Занятость -->
 
 			<!-- Образование -->
+			<h3 style="margin-bottom: 10px">Образование</h3>
+			<div id="educationGroup" style="margin-bottom: 25px">
+				<button type="button" class="btn btn-primary addEducationsGroupItemToDOM" style="margin-bottom: 10px">
+					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Добавить
+				</button>
+			</div>
 			<!-- /Образование -->
 
 			<!-- Профессиональные навыки -->
+			<h3 style="margin-bottom: 10px">Профессиональные навыки</h3>
+			<div id="professionalSkillGroup" style="margin-bottom: 25px">
+				<button type="button" class="btn btn-primary addProfessionalSkillGroupItemToDOM" style="margin-bottom: 10px">
+					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Добавить
+				</button>
+			</div>
 			<!-- /Профессиональные навыки -->
 
 			<!-- Иностранные языки -->
+			<h3 style="margin-bottom: 10px">Иностранные языки</h3>
+			<div id="foreignLanguagesGroup" style="margin-bottom: 25px">
+				<button type="button" class="btn btn-primary addForeignLanguagesGroupItemToDOM" style="margin-bottom: 10px">
+					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Добавить
+				</button>
+			</div>
 			<!-- /Иностранные языки -->
 
 			<!-- Ссылки на open source проекты -->
+			<h3 style="margin-bottom: 10px">Ссылки на open source проекты</h3>
+			<div id="linksToOpenSourceGroup" style="margin-bottom: 25px">
+				<button type="button" class="btn btn-primary addLinksToOpenSourceGroupItemToDOM" style="margin-bottom: 10px">
+					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Добавить
+				</button>
+			</div>
 			<!-- /Ссылки на open source проекты -->
 
 			<!-- Сторонние проекты -->
+			<h3 style="margin-bottom: 10px">Сторонние проекты</h3>
+			<div id="otherProjectsGroup" style="margin-bottom: 25px">
+				<button type="button" class="btn btn-primary addOtherProjectsGroupItemToDOM" style="margin-bottom: 10px">
+					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Добавить
+				</button>
+			</div>
 			<!-- /Сторонние проекты -->
 
 			<!-- Ссылки на социальные сети -->
+			<h3 style="margin-bottom: 10px">Ссылки на социальные сети</h3>
+			<div id="socialNetworksGroup" style="margin-bottom: 25px">
+				<button type="button" class="btn btn-primary addSocialNetworksGroupItemToDOM" style="margin-bottom: 10px">
+					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Добавить
+				</button>
+			</div>
 			<!-- /Ссылки на социальные сети -->
 		</form>
 		<!-- /Форма -->
