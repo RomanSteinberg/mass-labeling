@@ -154,8 +154,9 @@ TaskSchema.statics = {
 
 		// Костыль!!!
 		let answer = 1;
-		if (answerCode === 'X' || answerAlgorithm === 'X') {
-			answer = 'X';
+
+		if (! answerCode || ! answerAlgorithm) {
+			answer = 0;
 		}
 
 		return this.create({
