@@ -116,7 +116,7 @@ router.post('/answer', async (req, res, next) => {
 				siteId: task.siteId,
 				answer: task.answer,
 				userId: task.userId,
-				form: task.form,
+				formId: task.formId,
 			}, 'answerFormTask');
 
 			res.api.response(task.id);

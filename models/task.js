@@ -33,9 +33,10 @@ const TaskSchema = new mongoose.Schema({
 		required: false,
 	},
 
-	form: {
+	formId: {
 		type: mongoose.Schema.ObjectId,
 		required: false,
+		ref: 'PersonForm',
 	},
 
 	userId: {
@@ -229,7 +230,7 @@ TaskSchema.statics = {
 		return this.create({
 			siteId,
 			answer,
-			form: personForm,
+			formId: personForm._id,
 			userId,
 			taskSetId: activeTaskSet._id,
 		});

@@ -387,8 +387,6 @@ const getSerializedDataOfForm = () => {
 		serializedData.socialNetworks.push($(this).val());
 	});
 
-	console.log('serializedData', serializedData);
-
 	return serializedData;
 };
 

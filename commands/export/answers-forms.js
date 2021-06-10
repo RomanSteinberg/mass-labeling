@@ -33,7 +33,7 @@ module.exports = (program) => {
 			...Site.filter.allowedStatuses,
 		};
 
-		if (config.get('cliExport.datasets').length) {
+		if (config.get('cliExport.datasets')) {
 			sitesFilter.dataset = {
 				$in: config.get('cliExport.datasets'),
 			};
@@ -52,7 +52,7 @@ module.exports = (program) => {
 		const tasks = await Task.find({
 			siteId: { $in: sites.map(site => site.id) },
 			answer: { $ne: 0 },
-		}).lean();
+		}).populate('formId').lean();
 		const tasksMap = _.groupBy(tasks, 'siteId');
 
 		logger.info('Tasks done');
@@ -65,9 +65,11 @@ module.exports = (program) => {
 			answers: (tasksMap[site.id] || []).map(task => ({
 				answer: task.answer,
 				user: usersMap[task.userId].email,
-				form: task.form,
+				// task.formId - это объект
+				form: task.formId,
 			})),
 		}));
+
 
 		logger.info('Answers done');
 
