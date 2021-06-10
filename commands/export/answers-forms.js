@@ -65,6 +65,7 @@ module.exports = (program) => {
 			answers: (tasksMap[site.id] || []).map(task => ({
 				answer: task.answer,
 				user: usersMap[task.userId].email,
+				form: task.form,
 			})),
 		}));
 
