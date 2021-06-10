@@ -28,13 +28,61 @@ const addProjectExperienceFormGroupItemToDOM = () => {
 		'	<p>End date (Конец работы в компании)</p>' +
 		'	<input type="date" class="form-control endDateField" style="margin-bottom: 10px" placeholder="End date (Конец работы в компании)" />' +
 		'' +
-		'	<button type="button" class="btn btn-danger removeProjectExperienceFormGroupItemToDOM">\n' +
+		'	<!-- Проекты (Projects)-->' +
+		'	<h3 style="margin-bottom: 10px">Проекты</h3>' +
+		'	<div class="projectsGroup" style="margin-bottom: 25px">' +
+		'		<button type="button" class="btn btn-primary addProjectGroupItemToDOM" style="margin-bottom: 10px">' +
+		'			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Добавить' +
+		'		</button>' +
+		'	</div>' +
+		'	<!-- /Проект (Projects)-->' +
+		'' +
+		'	<button type="button" class="btn btn-danger removeProjectExperienceFormGroupItemToDOM">' +
 		'  		<span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Удалить' +
 		'	</button>' +
 		'</div>' +
 		'');
 };
 
+// Вставить в элемент DOM $('#form') группу полей 'Опыт работы' --> 'Проекты'
+const addProjectGroupItemToDOM = (buttonElem) => {
+	const formProjectsGroupElem = buttonElem.parent();
+
+	formProjectsGroupElem.append('' +
+		'<div class="well well-sm projectExperienceItem" style="margin-bottom: 20px">' +
+		'	<input type="text" class="form-control descriptionField" style="margin-bottom: 10px" placeholder="Description (Описание проекта)" />' +
+		'	<input type="text" class="form-control responsibilityField" style="margin-bottom: 10px" placeholder="Responsibility (Обязанности)" />' +
+		'	<input type="number" class="form-control projectLengthField" style="margin-bottom: 10px" placeholder="ProjectLength (Длительность проекта)" />' +
+		'' +
+		'	<h4 style="margin-bottom: 10px">Технологии</h4>' +
+		'	<div id="technologiesGroup" style="margin-bottom: 25px">' +
+		'		<button type="button" class="btn btn-primary addTechnologiesGroupItemToDOM" style="margin-bottom: 10px">' +
+		'			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Добавить' +
+		'		</button>' +
+		'	</div>' +
+		'' +
+		'	<button type="button" class="btn btn-danger removeProjectExperienceFormGroupItemToDOM">' +
+		'  		<span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Удалить' +
+		'	</button>' +
+		'</div>' +
+		'');
+};
+
+// Вставить в элемент DOM $('#form') группу полей 'Опыт работы' --> 'Проекты' --> 'Технологии'
+const addTechnologiesGroupItemToDOM = (buttonElem) => {
+	const formTechnologiesGroupElem = buttonElem.parent();
+
+	formTechnologiesGroupElem.append('' +
+		'<div class="input-group" style="margin-bottom: 10px">' +
+		'	<input type="text" class="form-control" placeholder="Технология">' +
+		'	<span class="input-group-btn">' +
+		'		<button class="btn btn-danger removeTechnologiesGroupItemToDOM" type="button">' +
+		'			<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>' +
+		'		</button>' +
+		'	</span>' +
+		'</div>' +
+		'');
+};
 
 // Вставить в элемент DOM $('#form') группу полей 'Образование'
 const addEducationsGroupItemToDOM = () => {
@@ -48,7 +96,7 @@ const addEducationsGroupItemToDOM = () => {
 		'	<input type="text" class="form-control universityNameField" style="margin-bottom: 10px" placeholder="University name (Название университета)" />' +
 		'	<input type="text" class="form-control degreeField" style="margin-bottom: 10px" placeholder="Degree (Степень)" />' +
 		'' +
-		'	<button type="button" class="btn btn-danger removeEducationsGroupItemToDOM">\n' +
+		'	<button type="button" class="btn btn-danger removeEducationsGroupItemToDOM">' +
 		'  		<span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Удалить' +
 		'	</button>' +
 		'</div>' +
@@ -69,7 +117,7 @@ const addProfessionalSkillGroupItemToDOM = () => {
 		'		<button class="btn btn-danger removeProfessionalSkillItemToDOM" type="button">' +
 		'			<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>' +
 		'		</button>' +
-		'	</span>\n' +
+		'	</span>' +
 		'</div>' +
 		'');
 };
@@ -87,7 +135,7 @@ const addForeignLanguagesGroupItemToDOM = () => {
 		'	<input type="text" class="form-control levelOfProficiencyField" ' +
 		'			style="margin-bottom: 10px" placeholder="Level Of Proficiency (Уровень владения)" />' +
 		'' +
-		'	<button type="button" class="btn btn-danger removeForeignLanguagesGroupItemToDOM">\n' +
+		'	<button type="button" class="btn btn-danger removeForeignLanguagesGroupItemToDOM">' +
 		'  		<span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Удалить' +
 		'	</button>' +
 		'</div>' +
@@ -108,7 +156,7 @@ const addLinksToOpenSourceGroupItemToDOM = () => {
 		'		<button class="btn btn-danger removeLinksToOpenSourceGroupItemToDOM" type="button">' +
 		'			<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>' +
 		'		</button>' +
-		'	</span>\n' +
+		'	</span>' +
 		'</div>' +
 		'');
 };
@@ -127,7 +175,7 @@ const addOtherProjectsGroupItemToDOM = () => {
 		'		<button class="btn btn-danger removeOtherProjectsGroupItemToDOM" type="button">' +
 		'			<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>' +
 		'		</button>' +
-		'	</span>\n' +
+		'	</span>' +
 		'</div>' +
 		'');
 };
@@ -146,7 +194,7 @@ const addSocialNetworksGroupItemToDOM = () => {
 		'		<button class="btn btn-danger removeSocialNetworksGroupItemToDOM" type="button">' +
 		'			<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>' +
 		'		</button>' +
-		'	</span>\n' +
+		'	</span>' +
 		'</div>' +
 		'');
 };
@@ -190,8 +238,34 @@ $('.addSocialNetworksGroupItemToDOM').click(() => {
 	addSocialNetworksGroupItemToDOM();
 });
 
+$(document).on('click', '.addProjectGroupItemToDOM', function () {
+	const buttonElem = $(this);
+	addProjectGroupItemToDOM(buttonElem);
+});
+
+$(document).on('click', '.addTechnologiesGroupItemToDOM', function () {
+	const buttonElem = $(this);
+	addTechnologiesGroupItemToDOM(buttonElem);
+});
+
+// ----
+
 $(document).on('click', '.removeProjectExperienceFormGroupItemToDOM', function () {
 	$(this).parent().remove();
+});
+
+$(document).on('click', '.removeOtherProjectsGroupItemToDOM', function () {
+	$(this)
+		.parent()
+		.parent()
+		.remove();
+});
+
+$(document).on('click', '.removeTechnologiesGroupItemToDOM', function () {
+	$(this)
+		.parent()
+		.parent()
+		.remove();
 });
 
 $(document).on('click', '.removeEducationsGroupItemToDOM', function () {
@@ -216,19 +290,14 @@ $(document).on('click', '.removeLinksToOpenSourceGroupItemToDOM', function () {
 		.remove();
 });
 
-$(document).on('click', '.removeOtherProjectsGroupItemToDOM', function () {
-	$(this)
-		.parent()
-		.parent()
-		.remove();
-});
-
 $(document).on('click', '.removeSocialNetworksGroupItemToDOM', function () {
 	$(this)
 		.parent()
 		.parent()
 		.remove();
 });
+
+// ----
 
 class Design {
 	constructor(markupCount, markupLimit) {
@@ -254,10 +323,12 @@ class Design {
 
 		this.focusedInput = false;
 		// Запоминаем весит ли фокус на полях формы или нет нужно чтоб понять оценивать или нет (по нажатию клавиш цифр)
-		$('input, textarea, select').focus(() => {
+
+		$(document).on('focus', 'input, textarea, select', () => {
 			// Тут обязательно юзаем функцию ссылочного типа, чтою this был экземпляр класса Design
 			this.focusedInput = true;
-		}).blur(() => {
+		});
+		$(document).on('blur', 'input, textarea, select', () => {
 			// Тут обязательно юзаем функцию ссылочного типа, чтою this был экземпляр класса Design
 			this.focusedInput = false;
 		});
