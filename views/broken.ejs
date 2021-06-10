@@ -2,20 +2,34 @@
 <table class="table table-striped">
 	<thead>
 		<tr>
-			<th>URL</th>
+			<% if (entityMode === 'site' || entityMode === 'link') { %>
+				<th>URL</th>
+			<% } %>
+			<% if (entityMode === 'form') { %>
+				<th><%= getText('person') %></th>
+			<% } %>
+
 			<% if (entityMode === 'site') { %>
 				<th><%= getText('screenshot') %></th>
 			<% } %>
+
 			<th><%= getText('check_result') %></th>
 		</tr>
 	</thead>
 	<tbody>
 		<% sites.forEach(site => { %>
 			<tr>
-				<td><a href="<%= site.url %>" target="_blank"><%= site.url %></a></td>
+				<% if (entityMode === 'site' || entityMode === 'link') { %>
+					<td><a href="<%= site.url %>" target="_blank"><%= site.url %></a></td>
+				<% } %>
+				<% if (entityMode === 'form') { %>
+					<td><%= site.url %></td>
+				<% } %>
+
 				<% if (entityMode === 'site') { %>
 					<td><a href="/api/site/<%= site.id %>/screenshot" target="_blank"><%= getText('screenshot') %></a></td>
 				<% } %>
+
 				<td>
 					<button type="button" class="btn btn-success btn-xs approve" data-id="<%= site.id %>">
 						<%= getText('is_working') %>
