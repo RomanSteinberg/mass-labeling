@@ -598,7 +598,7 @@ class Design {
 				activeTaskSetId,
 				siteId: this.task.siteId,
 				answer: this.answer,
-				serializedDataOfForm,
+				form: serializedDataOfForm,
 			};
 		} else if (this.mode === 'link') {
 			payload = {

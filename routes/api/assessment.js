@@ -104,7 +104,22 @@ router.post('/answer', async (req, res, next) => {
 		const entityMode = config.get('boot.entityMode');
 
 		if (entityMode === 'form') {
-			// TODO...
+			const task = await Task.getNewForm({
+				siteId: req.body.siteId,
+				answer: Number(req.body.answer),
+				userId: req.user.id,
+				form: req.body.form,
+			});
+
+			logger.info({
+				taskId: task.id,
+				siteId: task.siteId,
+				answer: task.answer,
+				userId: task.userId,
+				form: task.form,
+			}, 'answerFormTask');
+
+			res.api.response(task.id);
 		} else if (entityMode === 'link') {
 			const task = await Task.getNewLink({
 				siteId: req.body.siteId,

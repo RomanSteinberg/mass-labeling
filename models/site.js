@@ -26,11 +26,6 @@ const SiteSchema = new mongoose.Schema({
 		type: String,
 		required: false,
 	},
-
-	// projectExperience: {
-	// 	type: mongoose.Schema.ObjectId,
-	// 	required: true,
-	// },
 });
 
 SiteSchema.index({
