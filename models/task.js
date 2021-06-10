@@ -153,7 +153,10 @@ TaskSchema.statics = {
 		}
 
 		// Костыль!!!
-		const answer = 1;
+		let answer = 1;
+		if (answerCode === 'X' || answerAlgorithm === 'X') {
+			answer = 'X';
+		}
 
 		return this.create({
 			siteId,
