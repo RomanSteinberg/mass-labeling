@@ -5,6 +5,7 @@
 		"json"
 	],
 	"rules": {
+    "prefer-template": "off",
 		"brace-style": [
 			"error",
 			"1tbs"
