@@ -16,64 +16,200 @@ module.exports = (program) => {
 	program.option('--dataset <dataset>', 'Dataset name for export. For multiple use config:cli/export/answers/datasets (default: all datasets)');
 	program.option('--out <out_path>', 'JSON path', config.get('cliExport.out'));
 
-	// eslint-disable-next-line prefer-arrow-callback
-	program.asyncAction(async function (args) {
-		this.requireOption('out');
+	const entityMode = config.get('boot.entityMode');
+
+	if (entityMode === 'form') {
+		// eslint-disable-next-line prefer-arrow-callback
+		program.asyncAction(async function (args) {
+			this.requireOption('out');
 
 
-		// Получаем пользоватлей
-		const users = await User.find();
-		const usersMap = _.keyBy(users, 'id');
+			// Получаем пользоватлей
+			const users = await User.find();
+			const usersMap = _.keyBy(users, 'id');
 
-		logger.info('Users done');
+			logger.info('Users done');
 
-		// Получаем сайты
-		const sitesFilter = {
-			...Site.filter.allowedStatuses,
-		};
 
-		if (config.get('cliExport.datasets')) {
-			sitesFilter.dataset = {
-				$in: config.get('cliExport.datasets'),
+			// Получаем сайты
+			const sitesFilter = {
+				...Site.filter.allowedStatuses,
 			};
-		}
 
-		if (args.dataset) {
-			sitesFilter.dataset = args.dataset;
-		}
+			if (config.get('cliExport.datasets')) {
+				sitesFilter.dataset = {
+					$in: config.get('cliExport.datasets'),
+				};
+			}
 
-		const sites = await Site.find(sitesFilter);
+			if (args.dataset) {
+				sitesFilter.dataset = args.dataset;
+			}
 
-		logger.info('Sites done');
+			const sites = await Site.find(sitesFilter);
 
-
-		// Получаем ответы для всех сайтов
-		const tasks = await Task.find({
-			siteId: { $in: sites.map(site => site.id) },
-			answer: { $ne: 0 },
-		}).lean();
-		const tasksMap = _.groupBy(tasks, 'siteId');
-
-		logger.info('Tasks done');
+			logger.info('Sites done');
 
 
-		// Формируем набор ответов
-		const answers = sites.map(site => ({
-			url: site.url,
-			dataset: site.dataset,
-			answers: (tasksMap[site.id] || []).map(task => ({
-				answer: task.answer,
-				user: usersMap[task.userId].email,
-			})),
-		}));
+			// Получаем ответы для всех сайтов
+			const tasks = await Task.find({
+				siteId: { $in: sites.map(site => site.id) },
+				answer: { $ne: 0 },
+			}).populate('formId').lean();
+			const tasksMap = _.groupBy(tasks, 'siteId');
 
-		logger.info('Answers done');
+			logger.info('Tasks done');
 
 
-		// Сохраняем набор ответов
-		await fs.mkdirp(path.dirname(args.out));
-		await fs.writeJson(args.out, answers);
+			// Формируем набор ответов
+			const answers = sites.map(site => ({
+				url: site.url,
+				dataset: site.dataset,
+				answers: (tasksMap[site.id] || []).map(task => ({
+					answer: task.answer,
+					user: usersMap[task.userId].email,
+					// task.formId - это объект
+					form: task.formId,
+				})),
+			}));
 
-		logger.info('JSON done');
-	});
+
+			logger.info('Answers done');
+
+
+			// Сохраняем набор ответов
+			await fs.mkdirp(path.dirname(args.out));
+			await fs.writeJson(args.out, answers);
+
+			logger.info('JSON done');
+		});
+	} else if (entityMode === 'link') {
+		// eslint-disable-next-line prefer-arrow-callback
+		program.asyncAction(async function (args) {
+			this.requireOption('out');
+
+
+			// Получаем пользоватлей
+			const users = await User.find();
+			const usersMap = _.keyBy(users, 'id');
+
+			logger.info('Users done');
+
+
+			// Получаем сайты
+			const sitesFilter = {
+				...Site.filter.allowedStatuses,
+			};
+
+			if (config.get('cliExport.datasets')) {
+				sitesFilter.dataset = {
+					$in: config.get('cliExport.datasets'),
+				};
+			}
+
+			if (args.dataset) {
+				sitesFilter.dataset = args.dataset;
+			}
+
+			const sites = await Site.find(sitesFilter);
+
+			logger.info('Sites done');
+
+
+			// Получаем ответы для всех сайтов
+			const tasks = await Task.find({
+				siteId: { $in: sites.map(site => site.id) },
+				answer: { $ne: 0 },
+				answerCode: { $ne: 0 },
+				answerAlgorithm: { $ne: 0 },
+			}).lean();
+			const tasksMap = _.groupBy(tasks, 'siteId');
+
+			logger.info('Tasks done');
+
+
+			// Формируем набор ответов
+			const answers = sites.map(site => ({
+				url: site.url,
+				dataset: site.dataset,
+				answers: (tasksMap[site.id] || []).map(task => ({
+					answerCode: task.answerCode,
+					answerAlgorithm: task.answerAlgorithm,
+					user: usersMap[task.userId].email,
+				})),
+			}));
+
+			logger.info('Answers done');
+
+
+			// Сохраняем набор ответов
+			await fs.mkdirp(path.dirname(args.out));
+			await fs.writeJson(args.out, answers);
+
+			logger.info('JSON done');
+		});
+	} else {
+		// entityMode == site
+		// eslint-disable-next-line prefer-arrow-callback
+		program.asyncAction(async function (args) {
+			this.requireOption('out');
+
+
+			// Получаем пользоватлей
+			const users = await User.find();
+			const usersMap = _.keyBy(users, 'id');
+
+			logger.info('Users done');
+
+			// Получаем сайты
+			const sitesFilter = {
+				...Site.filter.allowedStatuses,
+			};
+
+			if (config.get('cliExport.datasets')) {
+				sitesFilter.dataset = {
+					$in: config.get('cliExport.datasets'),
+				};
+			}
+
+			if (args.dataset) {
+				sitesFilter.dataset = args.dataset;
+			}
+
+			const sites = await Site.find(sitesFilter);
+
+			logger.info('Sites done');
+
+
+			// Получаем ответы для всех сайтов
+			const tasks = await Task.find({
+				siteId: { $in: sites.map(site => site.id) },
+				answer: { $ne: 0 },
+			})
+				.lean();
+			const tasksMap = _.groupBy(tasks, 'siteId');
+
+			logger.info('Tasks done');
+
+
+			// Формируем набор ответов
+			const answers = sites.map(site => ({
+				url: site.url,
+				dataset: site.dataset,
+				answers: (tasksMap[site.id] || []).map(task => ({
+					answer: task.answer,
+					user: usersMap[task.userId].email,
+				})),
+			}));
+
+			logger.info('Answers done');
+
+
+			// Сохраняем набор ответов
+			await fs.mkdirp(path.dirname(args.out));
+			await fs.writeJson(args.out, answers);
+
+			logger.info('JSON done');
+		});
+	}
 };

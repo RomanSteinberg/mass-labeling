@@ -20,6 +20,7 @@ module.exports = (program) => {
 		try {
 			this.requireOption('in');
 
+			// const entityMode = config.get('boot.entityMode');
 
 			// Распаковываем архив, перемещаем скриншоты и читаем список сатов
 			const tmpPath = path.resolve('tmp/import/dataset');
@@ -60,7 +61,6 @@ module.exports = (program) => {
 			logger.info('Cleanup done');
 		} catch (error) {
 			logger.error(error.message);
-			console.error(error.message);
 		}
 	});
 };

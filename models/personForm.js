@@ -76,6 +76,11 @@ const EducationSchema = new mongoose.Schema({
 
 // Схема: Анкета
 const PersonFormSchema = new mongoose.Schema({
+	// ФИО
+	fullname: {
+		type: String,
+	},
+
 	// Опыт работы
 	projectExperience: [ProjectExperienceSchema],
 

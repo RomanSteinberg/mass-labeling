@@ -199,6 +199,7 @@ TaskSchema.statics = {
 		}
 
 		const personForm = await PersonForm.create({
+			fullname: form.fullname,
 			projectExperience: (form.projectExperiences || []).map(item => ({
 				companyName: item.companyName,
 				position: item.position,

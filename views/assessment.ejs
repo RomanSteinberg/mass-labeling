@@ -61,11 +61,11 @@
 
 		<% if (entityMode === 'link') { %>
 				<span class="answer navbar-text">
-					Код: <span id="answer-code"></span>
+					<%= getText('code') %>: <span id="answer-code"></span>
 				</span>
 
 				<span class="answer navbar-text">
-					Алгоритм: <span id="answer-algorithm"></span>
+					<%= getText('algorithm') %>: <span id="answer-algorithm"></span>
 				</span>
 		<% } %>
 	</div>
@@ -79,105 +79,119 @@
 	</div>
 
 	<div id="form" class="w-100" style="margin: 50px auto; max-width: 460px">
-		<h2 id="formTitle" style="white-space: pre-wrap; margin-bottom: 25px"></h2>
+		<h2 id="formIdWraper" style="margin-bottom: 25px">
+			Id: <span></span>
+		</h2>
 
 		<!-- Форма -->
 		<form>
+			<!-- ФИО -->
+			<div id="fullnameGroup" style="margin-bottom: 25px">
+				<p><%= getText('fullname') %></p>
+				<input type="text" class="form-control fullnameField" style="margin-bottom: 10px" />
+			</div>
+			<!-- /ФИО -->
+
 			<!-- Группа полей 'Опыт работы (Project experience)' -->
-			<h3 style="margin-bottom: 10px">Опыт работы</h3>
+			<h3 style="margin-bottom: 10px"><%= getText('project_experience') %></h3>
 			<div id="projectExperienceGroup" style="margin-bottom: 25px">
 				<button type="button" class="btn btn-primary addProjectExperienceFormGroupItemToDOM" style="margin-bottom: 10px">
-					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Добавить
+					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <%= getText('add') %>
 				</button>
 			</div>
 			<!-- /Группа полей 'Опыт работы (Project experience)' -->
 
 			<!-- Полный опыт работы -->
 			<div id="fullExperienceGroup" style="margin-bottom: 25px">
-				<input type="number" class="form-control fullExperienceField" style="margin-bottom: 10px" placeholder="Full Experience (Полный опыт работы месяцев)" />
+				<p><%= getText('full_experience') %></p>
+				<input type="number" class="form-control fullExperienceField" style="margin-bottom: 10px" />
 			</div>
 			<!-- /Полный опыт работы -->
 
 			<!-- Ожидаемая зарплата -->
 			<div id="expectedSalaryGroup" style="margin-bottom: 25px">
-				<input type="number" class="form-control expectedSalaryField" style="margin-bottom: 10px" placeholder="Expected Salary (Ожидаемая зарплата)" />
+				<p><%= getText('expected_salary') %></p>
+				<input type="number" class="form-control expectedSalaryField" style="margin-bottom: 10px" />
 			</div>
 			<!-- /Ожидаемая зарплата -->
 
 			<!-- Регион места работы -->
 			<div id="regionWorkLocationGroup" style="margin-bottom: 25px">
-				<input type="text" class="form-control regionWorkLocationField" style="margin-bottom: 10px" placeholder="Region Work Location (Регион места работы)" />
+				<p><%= getText('region_work_location') %></p>
+				<input type="text" class="form-control regionWorkLocationField" style="margin-bottom: 10px" />
 			</div>
 			<!-- /Регион места работы -->
 
 			<!-- Удаленка -->
 			<div id="remoteGroup" style="margin-bottom: 25px; text-align: left;">
-				<input type="checkbox" class="remoteField" /> Удаленка
+				<input type="checkbox" class="remoteField" /> <%= getText('remote') %>
 			</div>
 			<!-- /Удаленка -->
 
 			<!-- Гражданство -->
 			<div id="citizenshipGroup" style="margin-bottom: 25px">
-				<input type="text" class="form-control citizenshipField" style="margin-bottom: 10px" placeholder="Citizenship (Гражданство)" />
+				<p><%= getText('citizenship') %></p>
+				<input type="text" class="form-control citizenshipField" style="margin-bottom: 10px" />
 			</div>
 			<!-- /Гражданство -->
 
 			<!-- Занятость -->
 			<div id="employmentTypeGroup" style="margin-bottom: 25px">
-				<input type="text" class="form-control employmentTypeField" style="margin-bottom: 10px" placeholder="EmploymentType (Занятость)" />
+				<p><%= getText('employment_type') %></p>
+				<input type="text" class="form-control employmentTypeField" style="margin-bottom: 10px" />
 			</div>
 			<!-- /Занятость -->
 
 			<!-- Образование -->
-			<h3 style="margin-bottom: 10px">Образование</h3>
+			<h3 style="margin-bottom: 10px"><%= getText('education') %></h3>
 			<div id="educationGroup" style="margin-bottom: 25px">
 				<button type="button" class="btn btn-primary addEducationsGroupItemToDOM" style="margin-bottom: 10px">
-					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Добавить
+					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <%= getText('add') %>
 				</button>
 			</div>
 			<!-- /Образование -->
 
 			<!-- Профессиональные навыки -->
-			<h3 style="margin-bottom: 10px">Профессиональные навыки</h3>
+			<h3 style="margin-bottom: 10px"><%= getText('professional_skill') %></h3>
 			<div id="professionalSkillGroup" style="margin-bottom: 25px">
 				<button type="button" class="btn btn-primary addProfessionalSkillGroupItemToDOM" style="margin-bottom: 10px">
-					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Добавить
+					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <%= getText('add') %>
 				</button>
 			</div>
 			<!-- /Профессиональные навыки -->
 
 			<!-- Иностранные языки -->
-			<h3 style="margin-bottom: 10px">Иностранные языки</h3>
+			<h3 style="margin-bottom: 10px"><%= getText('foreign_languages') %></h3>
 			<div id="foreignLanguagesGroup" style="margin-bottom: 25px">
 				<button type="button" class="btn btn-primary addForeignLanguagesGroupItemToDOM" style="margin-bottom: 10px">
-					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Добавить
+					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <%= getText('add') %>
 				</button>
 			</div>
 			<!-- /Иностранные языки -->
 
 			<!-- Ссылки на open source проекты -->
-			<h3 style="margin-bottom: 10px">Ссылки на open source проекты</h3>
+			<h3 style="margin-bottom: 10px"><%= getText('links_to_open_source') %></h3>
 			<div id="linksToOpenSourceGroup" style="margin-bottom: 25px">
 				<button type="button" class="btn btn-primary addLinksToOpenSourceGroupItemToDOM" style="margin-bottom: 10px">
-					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Добавить
+					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <%= getText('add') %>
 				</button>
 			</div>
 			<!-- /Ссылки на open source проекты -->
 
 			<!-- Сторонние проекты -->
-			<h3 style="margin-bottom: 10px">Сторонние проекты</h3>
+			<h3 style="margin-bottom: 10px"><%= getText('other_projects') %></h3>
 			<div id="otherProjectsGroup" style="margin-bottom: 25px">
 				<button type="button" class="btn btn-primary addOtherProjectsGroupItemToDOM" style="margin-bottom: 10px">
-					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Добавить
+					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <%= getText('add') %>
 				</button>
 			</div>
 			<!-- /Сторонние проекты -->
 
 			<!-- Ссылки на социальные сети -->
-			<h3 style="margin-bottom: 10px">Ссылки на социальные сети</h3>
+			<h3 style="margin-bottom: 10px"><%= getText('social_networks') %></h3>
 			<div id="socialNetworksGroup" style="margin-bottom: 25px">
 				<button type="button" class="btn btn-primary addSocialNetworksGroupItemToDOM" style="margin-bottom: 10px">
-					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Добавить
+					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <%= getText('add') %>
 				</button>
 			</div>
 			<!-- /Ссылки на социальные сети -->

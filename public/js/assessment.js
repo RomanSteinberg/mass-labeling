@@ -21,24 +21,26 @@ const addProjectExperienceFormGroupItemToDOM = () => {
 
 	formProjectExperienceGroupElem.append('' +
 		'<div class="well well-sm projectExperienceItem" style="margin-bottom: 20px">' +
-		'	<input type="text" class="form-control companyNameField" style="margin-bottom: 10px" placeholder="Company name (Название компании)" />' +
-		'	<input type="text" class="form-control positionField" style="margin-bottom: 10px" placeholder="Position (Должность)" />' +
-		'	<p>Start date (Начало работы в компании)</p>' +
-		'	<input type="date" class="form-control startDateField" style="margin-bottom: 10px" placeholder="Start date (Начало работы в компании)" />' +
-		'	<p>End date (Конец работы в компании)</p>' +
-		'	<input type="date" class="form-control endDateField" style="margin-bottom: 10px" placeholder="End date (Конец работы в компании)" />' +
+		'   <p>' + signs.company_name + '</p>' +
+		'	<input type="text" class="form-control companyNameField" style="margin-bottom: 10px" />' +
+		'   <p>' + signs.position + '</p>' +
+		'	<input type="text" class="form-control positionField" style="margin-bottom: 10px" />' +
+		'	<p>' + signs.start_date + '</p>' +
+		'	<input type="date" class="form-control startDateField" style="margin-bottom: 10px" />' +
+		'	<p>' + signs.end_date + '</p>' +
+		'	<input type="date" class="form-control endDateField" style="margin-bottom: 10px" />' +
 		'' +
 		'	<!-- Проекты (Projects)-->' +
-		'	<h3 style="margin-bottom: 10px">Проекты</h3>' +
+		'	<h3 style="margin-bottom: 10px">' + signs.projects + '</h3>' +
 		'	<div class="projectsGroup" style="margin-bottom: 25px">' +
 		'		<button type="button" class="btn btn-primary addProjectGroupItemToDOM" style="margin-bottom: 10px">' +
-		'			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Добавить' +
+		'			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> ' + signs.add +
 		'		</button>' +
 		'	</div>' +
 		'	<!-- /Проект (Projects)-->' +
 		'' +
 		'	<button type="button" class="btn btn-danger removeProjectExperienceFormGroupItemToDOM">' +
-		'  		<span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Удалить' +
+		'  		<span class="glyphicon glyphicon-minus" aria-hidden="true"></span> ' + signs.delete +
 		'	</button>' +
 		'</div>' +
 		'');
@@ -50,20 +52,22 @@ const addProjectGroupItemToDOM = (buttonElem) => {
 
 	formProjectsGroupElem.append('' +
 		'<div class="well well-sm projectItem" style="margin-bottom: 20px">' +
-		'	<input type="text" class="form-control descriptionField" style="margin-bottom: 10px" placeholder="Description (Описание проекта)" />' +
-		'	<input type="text" class="form-control responsibilityField" style="margin-bottom: 10px" placeholder="Responsibility (Обязанности)" />' +
-		'	<input type="number" class="form-control projectLengthField" style="margin-bottom: 10px"' +
-		'			placeholder="ProjectLength (Длительность проекта месяцев)" />' +
+		'   <p>' + signs.description + '</p>' +
+		'	<input type="text" class="form-control descriptionField" style="margin-bottom: 10px" />' +
+		'   <p>' + signs.responsibility + '</p>' +
+		'	<input type="text" class="form-control responsibilityField" style="margin-bottom: 10px" />' +
+		'   <p>' + signs.project_length + '</p>' +
+		'	<input type="number" class="form-control projectLengthField" style="margin-bottom: 10px" />' +
 		'' +
-		'	<h4 style="margin-bottom: 10px">Технологии</h4>' +
+		'	<h4 style="margin-bottom: 10px">' + signs.technologies + '</h4>' +
 		'	<div class="technologiesGroup" style="margin-bottom: 25px">' +
 		'		<button type="button" class="btn btn-primary addTechnologiesGroupItemToDOM" style="margin-bottom: 10px">' +
-		'			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Добавить' +
+		'			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> ' + signs.add +
 		'		</button>' +
 		'	</div>' +
 		'' +
 		'	<button type="button" class="btn btn-danger removeProjectExperienceFormGroupItemToDOM">' +
-		'  		<span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Удалить' +
+		'  		<span class="glyphicon glyphicon-minus" aria-hidden="true"></span> ' + signs.delete +
 		'	</button>' +
 		'</div>' +
 		'');
@@ -75,7 +79,7 @@ const addTechnologiesGroupItemToDOM = (buttonElem) => {
 
 	formTechnologiesGroupElem.append('' +
 		'<div class="input-group" style="margin-bottom: 10px">' +
-		'	<input type="text" class="form-control technologyField" placeholder="Технология">' +
+		'	<input type="text" class="form-control technologyField">' +
 		'	<span class="input-group-btn">' +
 		'		<button class="btn btn-danger removeTechnologiesGroupItemToDOM" type="button">' +
 		'			<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>' +
@@ -94,11 +98,13 @@ const addEducationsGroupItemToDOM = () => {
 
 	formEducationsGroupElem.append('' +
 		'<div class="well well-sm educationsItem" style="margin-bottom: 20px">' +
-		'	<input type="text" class="form-control universityNameField" style="margin-bottom: 10px" placeholder="University name (Название университета)" />' +
-		'	<input type="text" class="form-control degreeField" style="margin-bottom: 10px" placeholder="Degree (Степень)" />' +
+		'   <p>' + signs.university_name + '</p>' +
+		'	<input type="text" class="form-control universityNameField" style="margin-bottom: 10px" />' +
+		'   <p>' + signs.degree + '</p>' +
+		'	<input type="text" class="form-control degreeField" style="margin-bottom: 10px" />' +
 		'' +
 		'	<button type="button" class="btn btn-danger removeEducationsGroupItemToDOM">' +
-		'  		<span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Удалить' +
+		'  		<span class="glyphicon glyphicon-minus" aria-hidden="true"></span> ' + signs.delete +
 		'	</button>' +
 		'</div>' +
 		'');
@@ -113,7 +119,7 @@ const addProfessionalSkillGroupItemToDOM = () => {
 
 	formProfessionalSkillGroupElem.append('' +
 		'<div class="input-group" style="margin-bottom: 10px">' +
-		'	<input type="text" class="form-control" placeholder="Профессиональный навык">' +
+		'	<input type="text" class="form-control">' +
 		'	<span class="input-group-btn">' +
 		'		<button class="btn btn-danger removeProfessionalSkillItemToDOM" type="button">' +
 		'			<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>' +
@@ -132,12 +138,13 @@ const addForeignLanguagesGroupItemToDOM = () => {
 
 	formForeignLanguagesGroupElem.append('' +
 		'<div class="well well-sm foreignLanguagesItem" style="margin-bottom: 20px">' +
-		'	<input type="text" class="form-control languageField" style="margin-bottom: 10px" placeholder="Language (Название языка)" />' +
-		'	<input type="text" class="form-control levelOfProficiencyField" ' +
-		'			style="margin-bottom: 10px" placeholder="Level Of Proficiency (Уровень владения)" />' +
+		'   <p>' + signs.language + '</p>' +
+		'	<input type="text" class="form-control languageField" style="margin-bottom: 10px" />' +
+		'   <p>' + signs.level_of_proficiency + '</p>' +
+		'	<input type="text" class="form-control levelOfProficiencyField" style="margin-bottom: 10px" />' +
 		'' +
 		'	<button type="button" class="btn btn-danger removeForeignLanguagesGroupItemToDOM">' +
-		'  		<span class="glyphicon glyphicon-minus" aria-hidden="true"></span> Удалить' +
+		'  		<span class="glyphicon glyphicon-minus" aria-hidden="true"></span> ' + signs.delete +
 		'	</button>' +
 		'</div>' +
 		'');
@@ -152,7 +159,7 @@ const addLinksToOpenSourceGroupItemToDOM = () => {
 
 	formLinksToOpenSourceGroupElem.append('' +
 		'<div class="input-group" style="margin-bottom: 10px">' +
-		'	<input type="text" class="form-control" placeholder="Ссылка на open source проект">' +
+		'	<input type="text" class="form-control" />' +
 		'	<span class="input-group-btn">' +
 		'		<button class="btn btn-danger removeLinksToOpenSourceGroupItemToDOM" type="button">' +
 		'			<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>' +
@@ -171,7 +178,7 @@ const addOtherProjectsGroupItemToDOM = () => {
 
 	formOtherProjectsGroupElem.append('' +
 		'<div class="input-group" style="margin-bottom: 10px">' +
-		'	<input type="text" class="form-control" placeholder="Сторонний проект">' +
+		'	<input type="text" class="form-control" />' +
 		'	<span class="input-group-btn">' +
 		'		<button class="btn btn-danger removeOtherProjectsGroupItemToDOM" type="button">' +
 		'			<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>' +
@@ -190,7 +197,7 @@ const addSocialNetworksGroupItemToDOM = () => {
 
 	formSocialNetworksGroupElem.append('' +
 		'<div class="input-group" style="margin-bottom: 10px">' +
-		'	<input type="text" class="form-control" placeholder="Ссылки на социальные сети">' +
+		'	<input type="text" class="form-control" />' +
 		'	<span class="input-group-btn">' +
 		'		<button class="btn btn-danger removeSocialNetworksGroupItemToDOM" type="button">' +
 		'			<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>' +
@@ -303,6 +310,7 @@ $(document).on('click', '.removeSocialNetworksGroupItemToDOM', function () {
 // Сериализация данных формы
 const getSerializedDataOfForm = () => {
 	const serializedData = {
+		fullname: $('.fullnameField').val(),
 		fullExperience: $('.fullExperienceField').val(),
 		expectedSalary: $('.expectedSalaryField').val(),
 		regionWorkLocation: $('.regionWorkLocationField').val(),
@@ -545,7 +553,7 @@ class Design {
 		} else if (this.task.entityMode === 'form') {
 			$('#image').hide();
 			$('#link').hide();
-			$('#form > #formTitle')
+			$('#form > #formIdWraper > span')
 				.text(this.task.siteUrl);
 		}
 
@@ -660,10 +668,10 @@ class Design {
 				event.preventDefault();
 
 				if (this.mode === 'form') {
-					if (this.answer != null) {
+					if (this.answer != null && (this.answer >= 1 && this.answer <= 10)) {
 						this.save();
 					} else {
-						alert(signs.no_mark_specified);
+						alert(signs.no_mark_specified_form);
 					}
 				} else if (this.mode === 'link') {
 					if ((this.answerCode != null) && (this.answerAlgorithm != null)) {
