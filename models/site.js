@@ -26,6 +26,12 @@ const SiteSchema = new mongoose.Schema({
 		type: String,
 		required: false,
 	},
+
+	formId: {
+		type: mongoose.Schema.ObjectId,
+		required: false,
+		ref: 'PersonForm',
+	},
 });
 
 SiteSchema.index({

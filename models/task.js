@@ -2,7 +2,6 @@
 const mongoose = require('mongoose');
 
 const Site = require('./site');
-const PersonForm = require('./personForm');
 const TaskSet = require('./taskset');
 
 
@@ -31,12 +30,6 @@ const TaskSchema = new mongoose.Schema({
 		min: 0,
 		max: 10,
 		required: false,
-	},
-
-	formId: {
-		type: mongoose.Schema.ObjectId,
-		required: false,
-		ref: 'PersonForm',
 	},
 
 	userId: {
@@ -171,7 +164,8 @@ TaskSchema.statics = {
 
 	// Set mark for form
 	async getNewForm({
-		siteId, answer, userId, form,
+		siteId, answer, userId,
+		// form,
 	}) {
 		const activeTaskSet = await TaskSet.getCurrentActive();
 
@@ -198,44 +192,9 @@ TaskSchema.statics = {
 			throw new Error('task_errors.bad_markup_request');
 		}
 
-		const personForm = await PersonForm.create({
-			fullname: form.fullname,
-			projectExperience: (form.projectExperiences || []).map(item => ({
-				companyName: item.companyName,
-				position: item.position,
-				startDate: item.startDate,
-				endDate: item.endDate,
-				projectsDescription: (item.projects || []).map(itemProj => ({
-					description: itemProj.description,
-					responsibility: itemProj.responsibility,
-					projectLength: itemProj.projectLength,
-					technologies: itemProj.technologies,
-				})),
-			})),
-			fullExperience: form.fullExperience,
-			expectedSalary: form.expectedSalary,
-			regionWorkLocation: form.regionWorkLocation,
-			remote: form.remote,
-			citizenship: form.citizenship,
-			employmentType: form.employmentType,
-			educations: (form.educations || []).map(item => ({
-				degree: item.degree,
-				universityName: item.universityName,
-			})),
-			professionalSkills: form.professionalSkills,
-			foreignLanguages: (form.educations || []).map(item => ({
-				language: item.language,
-				levelOfProficiency: item.levelOfProficiency,
-			})),
-			linksToOpenSource: form.linksToOpenSources,
-			otherProjects: form.otherProjects,
-			socialNetworks: form.socialNetworks,
-		});
-
 		return this.create({
 			siteId,
 			answer,
-			formId: personForm._id,
 			userId,
 			taskSetId: activeTaskSet._id,
 		});

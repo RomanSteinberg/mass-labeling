@@ -27,6 +27,9 @@
 	</div>
 </div>
 <a href="/assessment" class="btn btn-primary"><%= getText('get_new_task') %></a>
+<% if (entityMode === 'form') { %>
+	<a href="/assessment?mode=addform" class="btn btn-primary"><%= getText('set_form_data') %></a>
+<% } %>
 <br><br>
 
 <script>

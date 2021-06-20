@@ -12,6 +12,24 @@ window.jQuery = $;
 // Texts from back-end
 const { signs, activeTaskSetId } = window;
 
+// Get URL query parameter
+const getUrlQueryParameter = function getUrlParameter(sParam) {
+	const sPageURL = window.location.search.substring(1);
+	const sURLVariables = sPageURL.split('&');
+	let sParameterName;
+	let i;
+
+	for (i = 0; i < sURLVariables.length; i++) {
+		sParameterName = sURLVariables[i].split('=');
+
+		if (sParameterName[0] === sParam) {
+			// eslint-disable-next-line valid-typeof
+			return typeof sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+		}
+	}
+	return false;
+};
+
 // Вставить в элемент DOM $('#form') группу полей 'Опыт работы'
 const addProjectExperienceFormGroupItemToDOM = () => {
 	const formProjectExperienceGroupElem = $('#form > form > #projectExperienceGroup');
@@ -398,6 +416,36 @@ const getSerializedDataOfForm = () => {
 	return serializedData;
 };
 
+// Установка данных формы
+const setFormData = (form) => {
+	$('.fullnameField').val(form.fullname);
+	$('.fullExperienceField').val(form.fullExperience);
+	$('.expectedSalaryField').val(form.expectedSalary);
+	$('.regionWorkLocationField').val(form.regionWorkLocation);
+	$('.remoteField').prop('checked', form.remote);
+	$('.citizenshipField').val(form.citizenship);
+	$('.employmentTypeField').val(form.employmentType);
+
+
+	// Проходимся по 'Опыт работы'
+
+	// Проходимся по 'Опыт работы' ---> Проекты
+
+	// Проходимся по 'Опыт работы' ---> Проекты ---> Технологии
+
+	// Проходимся по 'Образование'
+
+	// Проходимся по 'Профессиональные навыки'
+
+	// Проходимся по 'Иностранные языки'
+
+	// Проходимся по 'Ссылки на open source проекты'
+
+	// Проходимся по 'Сторонние проекты'
+
+	// Проходимся по 'Ссылки на социальные сети'
+};
+
 // ----
 
 class Design {
@@ -440,6 +488,13 @@ class Design {
 				return;
 			}
 
+			// Проверка 'добавление данных' или 'оценивание'
+			if (getUrlQueryParameter('mode') === 'addform') {
+				// Тупо выход, так как оценку запоминать не нужно
+				return;
+			}
+
+			// Иначе оценивание
 			let { keyCode } = event;
 			const xKeyCode = 'X'.charCodeAt(0);
 
@@ -521,6 +576,15 @@ class Design {
 			}
 		});
 
+		// Проверка 'добавление данных' или 'оценивание'
+		if (getUrlQueryParameter('mode') === 'addform') {
+			// Тупо выход, так как оценку запоминать не нужно
+			// и скрываем элемент #formIdWraper
+			$('#formIdWraper').hide();
+			return;
+		}
+
+		// Иначе оценивание
 		this.next();
 	}
 
@@ -581,6 +645,11 @@ class Design {
 					$('#overdose').show();
 				} else {
 					this.task = task;
+
+					if (this.mode === 'form' && task.form) {
+						setFormData(task.form);
+					}
+
 					this.show();
 				}
 			})
@@ -599,13 +668,38 @@ class Design {
 
 		if (this.mode === 'form') {
 			const serializedDataOfForm = getSerializedDataOfForm();
+			payload = {
+				form: serializedDataOfForm,
+			};
 
+			// Проверка 'добавление данных' или 'оценивание'
+			if (getUrlQueryParameter('mode') === 'addform') {
+				Request.post('/api/assessment/create-new-form', { data: payload })
+					.then(() => {
+						// Сброс формы, через перезагрузку текущей страницы
+						document.location.reload();
+					})
+					.catch((error) => {
+						if (error.message === 'active_taskset_changed') {
+							window.location.href = '/dashboard';
+						} else {
+							alert(signs.set_form_data_error);
+						}
+					});
+
+				// Выход
+				return;
+			}
+
+			// иначе оценивание
 			payload = {
 				activeTaskSetId,
 				siteId: this.task.siteId,
 				answer: this.answer,
 				form: serializedDataOfForm,
 			};
+			// и запоминание пред формы
+			this.task.form = serializedDataOfForm;
 		} else if (this.mode === 'link') {
 			payload = {
 				activeTaskSetId,
@@ -650,6 +744,11 @@ class Design {
 				this.markupCount--;
 				this.task = this.prev;
 				this.prev = null;
+
+				if (this.mode === 'form' && this.task.form) {
+					setFormData(this.task.form);
+				}
+
 				this.show();
 			})
 			.catch((error) => {
@@ -668,6 +767,15 @@ class Design {
 				event.preventDefault();
 
 				if (this.mode === 'form') {
+					// Проверка 'добавление данных' или 'оценивание'
+					if (getUrlQueryParameter('mode') === 'addform') {
+						// Тупо сохранение и выход
+						this.save();
+						return;
+					}
+
+					// Иначе оценка
+
 					if (this.answer != null && (this.answer >= 1 && this.answer <= 10)) {
 						this.save();
 					} else {

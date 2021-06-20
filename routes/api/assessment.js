@@ -1,4 +1,8 @@
 /* eslint-disable no-underscore-dangle */
+const mongoose = require('mongoose');
+
+const PersonForm = require('../../models/personForm');
+
 const config = require('../../config');
 
 const Site = require('../../models/site');
@@ -11,6 +15,73 @@ const bridges = require('../bridges');
 
 const router = require('express').Router();
 
+
+/**
+ * Create new form
+ */
+router.post('/create-new-form', async (req, res) => {
+	const activeTaskSet = await TaskSet.getCurrentActive();
+
+	if (! activeTaskSet) {
+		throw new Error('no_active_tasks');
+	}
+
+	const entityMode = config.get('boot.entityMode');
+
+	if (entityMode !== 'form') {
+		throw new Error('only_form_mode');
+	}
+
+	// eslint-disable-next-line prefer-destructuring
+	const form = req.body.form;
+
+	const personForm = await PersonForm.create({
+		fullname: form.fullname,
+		projectExperience: (form.projectExperiences || []).map(item => ({
+			companyName: item.companyName,
+			position: item.position,
+			startDate: item.startDate,
+			endDate: item.endDate,
+			projectsDescription: (item.projects || []).map(itemProj => ({
+				description: itemProj.description,
+				responsibility: itemProj.responsibility,
+				projectLength: itemProj.projectLength,
+				technologies: itemProj.technologies,
+			})),
+		})),
+		fullExperience: form.fullExperience,
+		expectedSalary: form.expectedSalary,
+		regionWorkLocation: form.regionWorkLocation,
+		remote: form.remote,
+		citizenship: form.citizenship,
+		employmentType: form.employmentType,
+		educations: (form.educations || []).map(item => ({
+			degree: item.degree,
+			universityName: item.universityName,
+		})),
+		professionalSkills: form.professionalSkills,
+		foreignLanguages: (form.educations || []).map(item => ({
+			language: item.language,
+			levelOfProficiency: item.levelOfProficiency,
+		})),
+		linksToOpenSource: form.linksToOpenSources,
+		otherProjects: form.otherProjects,
+		socialNetworks: form.socialNetworks,
+	});
+
+	const id = mongoose.Types.ObjectId();
+
+	await Site.create({
+		_id: id,
+		url: id,
+		dataset: 'forms',
+		formId: personForm._id,
+	});
+
+	res.api.response({
+		formId: personForm._id,
+	});
+});
 
 /**
  * Get new task for user
@@ -65,12 +136,24 @@ router.post('/create', async (req, res, next) => {
 				userId: req.user.id,
 			}, 'createTask');
 
-			res.api.response({
-				siteId: site.id,
-				siteStatus: site.status,
-				siteUrl: site.url,
-				entityMode,
-			});
+			if (entityMode !== 'form') {
+				res.api.response({
+					siteId: site.id,
+					siteStatus: site.status,
+					siteUrl: site.url,
+					entityMode,
+				});
+			} else {
+				const form = await PersonForm.findById(site.formId).lean();
+
+				res.api.response({
+					siteId: site.id,
+					siteStatus: site.status,
+					siteUrl: site.url,
+					form,
+					entityMode,
+				});
+			}
 		} else {
 			res.api.response({
 				limitReached: true,
@@ -108,7 +191,12 @@ router.post('/answer', async (req, res, next) => {
 				siteId: req.body.siteId,
 				answer: Number(req.body.answer),
 				userId: req.user.id,
-				form: req.body.form,
+			});
+
+			const site = await Site.findById(req.body.siteId);
+
+			PersonForm.findByIdAndUpdate(site.formId, req.body.form, { upsert: true }, (err) => {
+				if (err) console.log(err);
 			});
 
 			logger.info({
@@ -116,7 +204,6 @@ router.post('/answer', async (req, res, next) => {
 				siteId: task.siteId,
 				answer: task.answer,
 				userId: task.userId,
-				formId: task.formId,
 			}, 'answerFormTask');
 
 			res.api.response(task.id);
@@ -181,6 +268,8 @@ router.post('/:taskId/undo', bridges.task.id, bridges.task.owner, async (req, re
 		}
 
 		await req.task.remove();
+
+		// const form = await PersonForm.findById(site.formId).lean();if (entityMode !== 'form') {
 
 		logger.info({
 			taskId: req.task.id,
