@@ -429,6 +429,12 @@ $(document).on('click', '.removeSocialNetworksGroupItemToDOM', function () {
 		.remove();
 });
 
+$('#link > a').click(function (e) {
+	e.preventDefault();
+	$(this).blur();
+	window.open($(this).attr('href'), '_blank');
+});
+
 // ----
 
 // Очишаем данных формы
