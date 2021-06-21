@@ -46,7 +46,8 @@ module.exports = (program) => {
 				sitesFilter.dataset = args.dataset;
 			}
 
-			const sites = await Site.find(sitesFilter);
+			const sites = await Site.find(sitesFilter).lean();
+			// const sites = await Site.find(sitesFilter).populate('formId').lean();
 
 			logger.info('Sites done');
 
@@ -55,7 +56,7 @@ module.exports = (program) => {
 			const tasks = await Task.find({
 				siteId: { $in: sites.map(site => site.id) },
 				answer: { $ne: 0 },
-			}).populate('formId').lean();
+			});
 			const tasksMap = _.groupBy(tasks, 'siteId');
 
 			logger.info('Tasks done');
@@ -65,11 +66,10 @@ module.exports = (program) => {
 			const answers = sites.map(site => ({
 				url: site.url,
 				dataset: site.dataset,
+				formId: site.formId,
 				answers: (tasksMap[site.id] || []).map(task => ({
 					answer: task.answer,
 					user: usersMap[task.userId].email,
-					// task.formId - это объект
-					form: task.formId,
 				})),
 			}));
 
