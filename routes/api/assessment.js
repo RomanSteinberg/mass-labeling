@@ -17,6 +17,26 @@ const router = require('express').Router();
 
 
 /**
+ * Нужно чтоб перевести глубкой обхект в DotNotation,
+ * например $set: {"friends.0.emails.$.email" : '2222'}
+ *
+ * @param {Object|Array<Object>} args The object or array to  loop through
+ * @param {String} prefix The prefix to fill the $set object
+ * @returns {Object}
+ */
+const objectToDotNotation = (args, prefix = '') =>
+	Object.keys(args).reduce((acc, key) => {
+		if (typeof args[key] === 'object') {
+			Object.assign(acc, objectToDotNotation(args[key], `${prefix}${key}.`));
+		} else {
+			acc[`${prefix}${key}`] = args[key];
+		}
+
+		return acc;
+	}, {});
+
+
+/**
  * Create new form
  */
 router.post('/create-new-form', async (req, res) => {
@@ -37,12 +57,12 @@ router.post('/create-new-form', async (req, res) => {
 
 	const personForm = await PersonForm.create({
 		fullname: form.fullname,
-		projectExperience: (form.projectExperiences || []).map(item => ({
+		projectExperience: (form.projectExperience || []).map(item => ({
 			companyName: item.companyName,
 			position: item.position,
 			startDate: item.startDate,
 			endDate: item.endDate,
-			projectsDescription: (item.projects || []).map(itemProj => ({
+			projectsDescription: (item.projectsDescription || []).map(itemProj => ({
 				description: itemProj.description,
 				responsibility: itemProj.responsibility,
 				projectLength: itemProj.projectLength,
@@ -195,7 +215,7 @@ router.post('/answer', async (req, res, next) => {
 
 			const site = await Site.findById(req.body.siteId);
 
-			PersonForm.findByIdAndUpdate(site.formId, req.body.form, { upsert: true }, (err) => {
+			PersonForm.findByIdAndUpdate(site.formId, { $set: objectToDotNotation(req.body.form) }, { upsert: true }, (err) => {
 				if (err) console.log(err);
 			});
 
@@ -268,8 +288,6 @@ router.post('/:taskId/undo', bridges.task.id, bridges.task.owner, async (req, re
 		}
 
 		await req.task.remove();
-
-		// const form = await PersonForm.findById(site.formId).lean();if (entityMode !== 'form') {
 
 		logger.info({
 			taskId: req.task.id,

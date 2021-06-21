@@ -9,6 +9,18 @@ import '../css/assessment.css';
 window.$ = $;
 window.jQuery = $;
 
+// eslint-disable-next-line no-extend-native
+Date.prototype.yyyymmdd = function () {
+	const mm = this.getMonth() + 1; // getMonth() is zero-based
+	const dd = this.getDate();
+
+	return [this.getFullYear(),
+		(mm > 9 ? '' : '0') + mm,
+		(dd > 9 ? '' : '0') + dd,
+	].join('-');
+};
+
+
 // Texts from back-end
 const { signs, activeTaskSetId } = window;
 
@@ -30,27 +42,138 @@ const getUrlQueryParameter = function getUrlParameter(sParam) {
 	return false;
 };
 
+// Вставить в элемент DOM $('#form') группу полей 'Опыт работы' --> 'Проекты' --> 'Технологии'
+const addTechnologiesGroupItemToDOM = (buttonElem, value = '') => {
+	const itemToDOM = '' +
+		'<div class="input-group" style="margin-bottom: 10px">' +
+		'	<input type="text" class="form-control technologyField" value="' + value + '"/>' +
+		'	<span class="input-group-btn">' +
+		'		<button class="btn btn-danger removeTechnologiesGroupItemToDOM" type="button">' +
+		'			<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>' +
+		'		</button>' +
+		'	</span>' +
+		'</div>';
+
+	if (buttonElem) {
+		const formTechnologiesGroupElem = buttonElem.parent();
+
+		formTechnologiesGroupElem.append(itemToDOM);
+		return '';
+	} else {
+		return itemToDOM;
+	}
+};
+
+// Вставить в элемент DOM $('#form') группу полей 'Опыт работы' --> 'Проекты'
+const addProjectGroupItemToDOM = (buttonElem, valueObj) => {
+	let descriptionVal = '';
+	let responsibilityVal = '';
+	let projectLengthVal = '';
+	let technologiesGroupItemToDOMStr = '';
+
+	if (valueObj) {
+		if (valueObj.description) {
+			descriptionVal = valueObj.description;
+		}
+		if (valueObj.responsibility) {
+			responsibilityVal = valueObj.responsibility;
+		}
+		if (valueObj.projectLength) {
+			projectLengthVal = valueObj.projectLength;
+		}
+
+		// Проходимся по 'Опыт работы' ---> Проекты ---> Технологии
+		if (valueObj.technologies) {
+			valueObj.technologies.forEach((value) => {
+				technologiesGroupItemToDOMStr += addTechnologiesGroupItemToDOM(null, value);
+			});
+		}
+	}
+
+	const itemToDOM = '' +
+		'<div class="well well-sm projectItem" style="margin-bottom: 20px">' +
+		'   <p>' + signs.description + '</p>' +
+		'	<input type="text" class="form-control descriptionField" style="margin-bottom: 10px" value="' + descriptionVal + '" />' +
+		'   <p>' + signs.responsibility + '</p>' +
+		'	<input type="text" class="form-control responsibilityField" style="margin-bottom: 10px" value="' + responsibilityVal + '" />' +
+		'   <p>' + signs.project_length + '</p>' +
+		'	<input type="number" class="form-control projectLengthField" style="margin-bottom: 10px" value="' + projectLengthVal + '" />' +
+		'' +
+		'	<h4 style="margin-bottom: 10px">' + signs.technologies + '</h4>' +
+		'	<div class="technologiesGroup" style="margin-bottom: 25px">' +
+		technologiesGroupItemToDOMStr +
+		'		<button type="button" class="btn btn-primary addTechnologiesGroupItemToDOM" style="margin-bottom: 10px">' +
+		'			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> ' + signs.add +
+		'		</button>' +
+		'	</div>' +
+		'' +
+		'	<button type="button" class="btn btn-danger removeProjectExperienceFormGroupItemToDOM">' +
+		'  		<span class="glyphicon glyphicon-minus" aria-hidden="true"></span> ' + signs.delete +
+		'	</button>' +
+		'</div>';
+
+	if (buttonElem) {
+		const formProjectsGroupElem = buttonElem.parent();
+
+		formProjectsGroupElem.append(itemToDOM);
+		return '';
+	} else {
+		return itemToDOM;
+	}
+};
+
 // Вставить в элемент DOM $('#form') группу полей 'Опыт работы'
-const addProjectExperienceFormGroupItemToDOM = () => {
+const addProjectExperienceFormGroupItemToDOM = (valueObj) => {
 	const formProjectExperienceGroupElem = $('#form > form > #projectExperienceGroup');
 	if (! formProjectExperienceGroupElem.length) {
 		return;
 	}
 
+	let companyNameVal = '';
+	let positionVal = '';
+	let startDateVal = '';
+	let endDateVal = '';
+	let projectGroupItemToDOMStr = '';
+
+	if (valueObj) {
+		if (valueObj.companyName) {
+			companyNameVal = valueObj.companyName;
+		}
+		if (valueObj.position) {
+			positionVal = valueObj.position;
+		}
+		if (valueObj.startDate) {
+			const startDate = new Date(valueObj.startDate);
+			startDateVal = startDate.yyyymmdd();
+		}
+		if (valueObj.endDate) {
+			const endDate = new Date(valueObj.endDate);
+			endDateVal = endDate.yyyymmdd();
+		}
+
+		if (valueObj.projectsDescription) {
+			// Проходимся по 'Опыт работы' ---> Проекты
+			valueObj.projectsDescription.forEach((valueObj) => {
+				projectGroupItemToDOMStr += addProjectGroupItemToDOM(null, valueObj);
+			});
+		}
+	}
+
 	formProjectExperienceGroupElem.append('' +
 		'<div class="well well-sm projectExperienceItem" style="margin-bottom: 20px">' +
 		'   <p>' + signs.company_name + '</p>' +
-		'	<input type="text" class="form-control companyNameField" style="margin-bottom: 10px" />' +
+		'	<input type="text" class="form-control companyNameField" style="margin-bottom: 10px" value="' + companyNameVal + '" />' +
 		'   <p>' + signs.position + '</p>' +
-		'	<input type="text" class="form-control positionField" style="margin-bottom: 10px" />' +
+		'	<input type="text" class="form-control positionField" style="margin-bottom: 10px" value="' + positionVal + '" />' +
 		'	<p>' + signs.start_date + '</p>' +
-		'	<input type="date" class="form-control startDateField" style="margin-bottom: 10px" />' +
+		'	<input type="date" class="form-control startDateField" style="margin-bottom: 10px" value="' + startDateVal + '" />' +
 		'	<p>' + signs.end_date + '</p>' +
-		'	<input type="date" class="form-control endDateField" style="margin-bottom: 10px" />' +
+		'	<input type="date" class="form-control endDateField" style="margin-bottom: 10px" value="' + endDateVal + '" />' +
 		'' +
 		'	<!-- Проекты (Projects)-->' +
 		'	<h3 style="margin-bottom: 10px">' + signs.projects + '</h3>' +
 		'	<div class="projectsGroup" style="margin-bottom: 25px">' +
+		projectGroupItemToDOMStr +
 		'		<button type="button" class="btn btn-primary addProjectGroupItemToDOM" style="margin-bottom: 10px">' +
 		'			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> ' + signs.add +
 		'		</button>' +
@@ -64,62 +187,33 @@ const addProjectExperienceFormGroupItemToDOM = () => {
 		'');
 };
 
-// Вставить в элемент DOM $('#form') группу полей 'Опыт работы' --> 'Проекты'
-const addProjectGroupItemToDOM = (buttonElem) => {
-	const formProjectsGroupElem = buttonElem.parent();
-
-	formProjectsGroupElem.append('' +
-		'<div class="well well-sm projectItem" style="margin-bottom: 20px">' +
-		'   <p>' + signs.description + '</p>' +
-		'	<input type="text" class="form-control descriptionField" style="margin-bottom: 10px" />' +
-		'   <p>' + signs.responsibility + '</p>' +
-		'	<input type="text" class="form-control responsibilityField" style="margin-bottom: 10px" />' +
-		'   <p>' + signs.project_length + '</p>' +
-		'	<input type="number" class="form-control projectLengthField" style="margin-bottom: 10px" />' +
-		'' +
-		'	<h4 style="margin-bottom: 10px">' + signs.technologies + '</h4>' +
-		'	<div class="technologiesGroup" style="margin-bottom: 25px">' +
-		'		<button type="button" class="btn btn-primary addTechnologiesGroupItemToDOM" style="margin-bottom: 10px">' +
-		'			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> ' + signs.add +
-		'		</button>' +
-		'	</div>' +
-		'' +
-		'	<button type="button" class="btn btn-danger removeProjectExperienceFormGroupItemToDOM">' +
-		'  		<span class="glyphicon glyphicon-minus" aria-hidden="true"></span> ' + signs.delete +
-		'	</button>' +
-		'</div>' +
-		'');
-};
-
-// Вставить в элемент DOM $('#form') группу полей 'Опыт работы' --> 'Проекты' --> 'Технологии'
-const addTechnologiesGroupItemToDOM = (buttonElem) => {
-	const formTechnologiesGroupElem = buttonElem.parent();
-
-	formTechnologiesGroupElem.append('' +
-		'<div class="input-group" style="margin-bottom: 10px">' +
-		'	<input type="text" class="form-control technologyField">' +
-		'	<span class="input-group-btn">' +
-		'		<button class="btn btn-danger removeTechnologiesGroupItemToDOM" type="button">' +
-		'			<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>' +
-		'		</button>' +
-		'	</span>' +
-		'</div>' +
-		'');
-};
-
 // Вставить в элемент DOM $('#form') группу полей 'Образование'
-const addEducationsGroupItemToDOM = () => {
+const addEducationsGroupItemToDOM = (valueObj = null) => {
 	const formEducationsGroupElem = $('#form > form > #educationGroup');
 	if (! formEducationsGroupElem.length) {
 		return;
 	}
 
+	let universityNameVal = '';
+	let degreeVal = '';
+
+	if (valueObj) {
+		if (valueObj.universityName) {
+			universityNameVal = valueObj.universityName;
+		}
+		if (valueObj.degree) {
+			degreeVal = valueObj.degree;
+		}
+	}
+
 	formEducationsGroupElem.append('' +
 		'<div class="well well-sm educationsItem" style="margin-bottom: 20px">' +
 		'   <p>' + signs.university_name + '</p>' +
-		'	<input type="text" class="form-control universityNameField" style="margin-bottom: 10px" />' +
+		'	<input type="text" class="form-control universityNameField" style="margin-bottom: 10px"' +
+		'			value="' + universityNameVal + '" />' +
 		'   <p>' + signs.degree + '</p>' +
-		'	<input type="text" class="form-control degreeField" style="margin-bottom: 10px" />' +
+		'	<input type="text" class="form-control degreeField" style="margin-bottom: 10px"' +
+		'			value="' + degreeVal + '" />' +
 		'' +
 		'	<button type="button" class="btn btn-danger removeEducationsGroupItemToDOM">' +
 		'  		<span class="glyphicon glyphicon-minus" aria-hidden="true"></span> ' + signs.delete +
@@ -129,7 +223,7 @@ const addEducationsGroupItemToDOM = () => {
 };
 
 // Вставить в элемент DOM $('#form') группу полей 'Профессиональные навыки'
-const addProfessionalSkillGroupItemToDOM = () => {
+const addProfessionalSkillGroupItemToDOM = (value = '') => {
 	const formProfessionalSkillGroupElem = $('#form > form > #professionalSkillGroup');
 	if (! formProfessionalSkillGroupElem.length) {
 		return;
@@ -137,7 +231,7 @@ const addProfessionalSkillGroupItemToDOM = () => {
 
 	formProfessionalSkillGroupElem.append('' +
 		'<div class="input-group" style="margin-bottom: 10px">' +
-		'	<input type="text" class="form-control">' +
+		'	<input type="text" class="form-control" value="' + value + '" />' +
 		'	<span class="input-group-btn">' +
 		'		<button class="btn btn-danger removeProfessionalSkillItemToDOM" type="button">' +
 		'			<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>' +
@@ -147,19 +241,31 @@ const addProfessionalSkillGroupItemToDOM = () => {
 		'');
 };
 
-// Вставить в элемент DOM $('#form') группу полей 'Образование'
-const addForeignLanguagesGroupItemToDOM = () => {
+// Вставить в элемент DOM $('#form') группу полей 'Язык'
+const addForeignLanguagesGroupItemToDOM = (valueObj) => {
 	const formForeignLanguagesGroupElem = $('#form > form > #foreignLanguagesGroup');
 	if (! formForeignLanguagesGroupElem.length) {
 		return;
 	}
 
+	let languageVal = '';
+	let levelOfProficiencyVal = '';
+
+	if (valueObj) {
+		if (valueObj.language) {
+			languageVal = valueObj.language;
+		}
+		if (valueObj.levelOfProficiency) {
+			levelOfProficiencyVal = valueObj.levelOfProficiency;
+		}
+	}
+
 	formForeignLanguagesGroupElem.append('' +
 		'<div class="well well-sm foreignLanguagesItem" style="margin-bottom: 20px">' +
 		'   <p>' + signs.language + '</p>' +
-		'	<input type="text" class="form-control languageField" style="margin-bottom: 10px" />' +
+		'	<input type="text" class="form-control languageField" style="margin-bottom: 10px" value="' + languageVal + '" />' +
 		'   <p>' + signs.level_of_proficiency + '</p>' +
-		'	<input type="text" class="form-control levelOfProficiencyField" style="margin-bottom: 10px" />' +
+		'	<input type="text" class="form-control levelOfProficiencyField" style="margin-bottom: 10px" value="' + levelOfProficiencyVal + '" />' +
 		'' +
 		'	<button type="button" class="btn btn-danger removeForeignLanguagesGroupItemToDOM">' +
 		'  		<span class="glyphicon glyphicon-minus" aria-hidden="true"></span> ' + signs.delete +
@@ -169,7 +275,7 @@ const addForeignLanguagesGroupItemToDOM = () => {
 };
 
 // Вставить в элемент DOM $('#form') группу полей 'Ссылки на open source проекты'
-const addLinksToOpenSourceGroupItemToDOM = () => {
+const addLinksToOpenSourceGroupItemToDOM = (value = '') => {
 	const formLinksToOpenSourceGroupElem = $('#form > form > #linksToOpenSourceGroup');
 	if (! formLinksToOpenSourceGroupElem.length) {
 		return;
@@ -177,7 +283,7 @@ const addLinksToOpenSourceGroupItemToDOM = () => {
 
 	formLinksToOpenSourceGroupElem.append('' +
 		'<div class="input-group" style="margin-bottom: 10px">' +
-		'	<input type="text" class="form-control" />' +
+		'	<input type="text" class="form-control" value="' + value + '" />' +
 		'	<span class="input-group-btn">' +
 		'		<button class="btn btn-danger removeLinksToOpenSourceGroupItemToDOM" type="button">' +
 		'			<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>' +
@@ -188,7 +294,7 @@ const addLinksToOpenSourceGroupItemToDOM = () => {
 };
 
 // Вставить в элемент DOM $('#form') группу полей 'Сторонние проекты'
-const addOtherProjectsGroupItemToDOM = () => {
+const addOtherProjectsGroupItemToDOM = (value = '') => {
 	const formOtherProjectsGroupElem = $('#form > form > #otherProjectsGroup');
 	if (! formOtherProjectsGroupElem.length) {
 		return;
@@ -196,7 +302,7 @@ const addOtherProjectsGroupItemToDOM = () => {
 
 	formOtherProjectsGroupElem.append('' +
 		'<div class="input-group" style="margin-bottom: 10px">' +
-		'	<input type="text" class="form-control" />' +
+		'	<input type="text" class="form-control" value="' + value + '" />' +
 		'	<span class="input-group-btn">' +
 		'		<button class="btn btn-danger removeOtherProjectsGroupItemToDOM" type="button">' +
 		'			<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>' +
@@ -207,7 +313,7 @@ const addOtherProjectsGroupItemToDOM = () => {
 };
 
 // Вставить в элемент DOM $('#form') группу полей 'Ссылки на социальные сети'
-const addSocialNetworksGroupItemToDOM = () => {
+const addSocialNetworksGroupItemToDOM = (value = '') => {
 	const formSocialNetworksGroupElem = $('#form > form > #socialNetworksGroup');
 	if (! formSocialNetworksGroupElem.length) {
 		return;
@@ -215,7 +321,7 @@ const addSocialNetworksGroupItemToDOM = () => {
 
 	formSocialNetworksGroupElem.append('' +
 		'<div class="input-group" style="margin-bottom: 10px">' +
-		'	<input type="text" class="form-control" />' +
+		'	<input type="text" class="form-control" value="' + value + '" />' +
 		'	<span class="input-group-btn">' +
 		'		<button class="btn btn-danger removeSocialNetworksGroupItemToDOM" type="button">' +
 		'			<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>' +
@@ -266,12 +372,12 @@ $('.addSocialNetworksGroupItemToDOM').click(() => {
 
 $(document).on('click', '.addProjectGroupItemToDOM', function () {
 	const buttonElem = $(this);
-	addProjectGroupItemToDOM(buttonElem);
+	addProjectGroupItemToDOM(buttonElem, null);
 });
 
 $(document).on('click', '.addTechnologiesGroupItemToDOM', function () {
 	const buttonElem = $(this);
-	addTechnologiesGroupItemToDOM(buttonElem);
+	addTechnologiesGroupItemToDOM(buttonElem, null);
 });
 
 // ----
@@ -335,7 +441,7 @@ const getSerializedDataOfForm = () => {
 		remote: $('.remoteField').is(':checked'),
 		citizenship: $('.citizenshipField').val(),
 		employmentType: $('.employmentTypeField').val(),
-		projectExperiences: [],
+		projectExperience: [],
 		educations: [],
 		professionalSkills: [],
 		foreignLanguages: [],
@@ -351,7 +457,7 @@ const getSerializedDataOfForm = () => {
 			position: $(this).find('.positionField').val(),
 			startDate: $(this).find('.startDateField').val(),
 			endDate: $(this).find('.endDateField').val(),
-			projects: [],
+			projectsDescription: [],
 		};
 
 		// Проходимся по 'Опыт работы' ---> Проекты
@@ -362,15 +468,15 @@ const getSerializedDataOfForm = () => {
 				projectLength: $(this).find('.projectLengthField').val(),
 				technologies: [],
 			};
-			projectExperience.projects.push(project);
+			projectExperience.projectsDescription.push(project);
 
 			// Проходимся по 'Опыт работы' ---> Проекты ---> Технологии
-			$(this).find('.projectItem').find('.technologiesGroup').each(function () {
-				project.technologies.push($(this).find('.technologyField').val());
+			$(this).find('.technologiesGroup').find('.technologyField').each(function () {
+				project.technologies.push($(this).val());
 			});
 		});
 
-		serializedData.projectExperiences.push(projectExperience);
+		serializedData.projectExperience.push(projectExperience);
 	});
 
 	// Проходимся по 'Образование'
@@ -428,22 +534,39 @@ const setFormData = (form) => {
 
 
 	// Проходимся по 'Опыт работы'
-
-	// Проходимся по 'Опыт работы' ---> Проекты
-
-	// Проходимся по 'Опыт работы' ---> Проекты ---> Технологии
+	form.projectExperience.forEach((value) => {
+		addProjectExperienceFormGroupItemToDOM(value);
+	});
 
 	// Проходимся по 'Образование'
+	form.educations.forEach((value) => {
+		addEducationsGroupItemToDOM(value);
+	});
 
 	// Проходимся по 'Профессиональные навыки'
+	form.professionalSkills.forEach((value) => {
+		addProfessionalSkillGroupItemToDOM(value);
+	});
 
 	// Проходимся по 'Иностранные языки'
+	form.foreignLanguages.forEach((valueObj) => {
+		addForeignLanguagesGroupItemToDOM(valueObj);
+	});
 
 	// Проходимся по 'Ссылки на open source проекты'
+	form.linksToOpenSource.forEach((value) => {
+		addLinksToOpenSourceGroupItemToDOM(value);
+	});
 
 	// Проходимся по 'Сторонние проекты'
+	form.otherProjects.forEach((value) => {
+		addOtherProjectsGroupItemToDOM(value);
+	});
 
 	// Проходимся по 'Ссылки на социальные сети'
+	form.socialNetworks.forEach((value) => {
+		addSocialNetworksGroupItemToDOM(value);
+	});
 };
 
 // ----
@@ -581,6 +704,8 @@ class Design {
 			// Тупо выход, так как оценку запоминать не нужно
 			// и скрываем элемент #formIdWraper
 			$('#formIdWraper').hide();
+
+			$('#answer-form').text(signs.set_form_data_mode);
 			return;
 		}
 
