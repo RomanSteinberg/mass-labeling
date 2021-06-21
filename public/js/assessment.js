@@ -431,6 +431,39 @@ $(document).on('click', '.removeSocialNetworksGroupItemToDOM', function () {
 
 // ----
 
+// Очишаем данных формы
+const clearDataOfForm = () => {
+	$('.fullnameField').val('');
+	$('.fullExperienceField').val('');
+	$('.expectedSalaryField').val('');
+	$('.regionWorkLocationField').val('');
+	$('.remoteField').prop('checked', false);
+	$('.citizenshipField').val('');
+	$('.employmentTypeField').val('');
+
+	$('.removeProjectExperienceFormGroupItemToDOM').each(function () {
+		$(this).click();
+	});
+	$('.removeEducationsGroupItemToDOM').each(function () {
+		$(this).click();
+	});
+	$('.removeProfessionalSkillItemToDOM').each(function () {
+		$(this).click();
+	});
+	$('.removeForeignLanguagesGroupItemToDOM').each(function () {
+		$(this).click();
+	});
+	$('.removeLinksToOpenSourceGroupItemToDOM').each(function () {
+		$(this).click();
+	});
+	$('.removeOtherProjectsGroupItemToDOM').each(function () {
+		$(this).click();
+	});
+	$('.removeSocialNetworksGroupItemToDOM').each(function () {
+		$(this).click();
+	});
+};
+
 // Сериализация данных формы
 const getSerializedDataOfForm = () => {
 	const serializedData = {
@@ -757,6 +790,8 @@ class Design {
 			$('#root').hide();
 			$('#overdose').show();
 		}
+
+		clearDataOfForm();
 
 		Request.post('/api/assessment/create', { data: { activeTaskSetId } })
 			.then((task) => {
