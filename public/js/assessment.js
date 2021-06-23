@@ -20,7 +20,6 @@ Date.prototype.yyyymmdd = function () {
 	].join('-');
 };
 
-
 // Texts from back-end
 const { signs, activeTaskSetId } = window;
 
@@ -42,11 +41,19 @@ const getUrlQueryParameter = function getUrlParameter(sParam) {
 	return false;
 };
 
+// eslint-disable-next-line vars-on-top
+let disabledFormStr = '';
+
+// Проверка 'добавление данных' или 'оценивание'
+if (getUrlQueryParameter('mode') !== 'addform') {
+	disabledFormStr = ' disabled ';
+}
+
 // Вставить в элемент DOM $('#form') группу полей 'Опыт работы' --> 'Проекты' --> 'Технологии'
 const addTechnologiesGroupItemToDOM = (buttonElem, value = '') => {
 	const itemToDOM = '' +
 		'<div class="input-group" style="margin-bottom: 10px">' +
-		'	<input type="text" class="form-control technologyField" value="' + value + '"/>' +
+		'	<input type="text" class="form-control technologyField" value="' + value + '" ' + disabledFormStr + '/>' +
 		'	<span class="input-group-btn">' +
 		'		<button class="btn btn-danger removeTechnologiesGroupItemToDOM" type="button">' +
 		'			<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>' +
@@ -93,21 +100,25 @@ const addProjectGroupItemToDOM = (buttonElem, valueObj) => {
 	const itemToDOM = '' +
 		'<div class="well well-sm projectItem" style="margin-bottom: 20px">' +
 		'   <p>' + signs.description + '</p>' +
-		'	<input type="text" class="form-control descriptionField" style="margin-bottom: 10px" value="' + descriptionVal + '" />' +
+		'	<input type="text" class="form-control descriptionField" style="margin-bottom: 10px" value="' + descriptionVal + '" ' +
+		'' + disabledFormStr + '/>' +
 		'   <p>' + signs.responsibility + '</p>' +
-		'	<input type="text" class="form-control responsibilityField" style="margin-bottom: 10px" value="' + responsibilityVal + '" />' +
+		'	<input type="text" class="form-control responsibilityField" style="margin-bottom: 10px" value="' + responsibilityVal + '" ' +
+		'' + disabledFormStr + '/>' +
 		'   <p>' + signs.project_length + '</p>' +
-		'	<input type="number" class="form-control projectLengthField" style="margin-bottom: 10px" value="' + projectLengthVal + '" />' +
+		'	<input type="number" class="form-control projectLengthField" style="margin-bottom: 10px" value="' + projectLengthVal + '" ' +
+		'' + disabledFormStr + '/>' +
 		'' +
 		'	<h4 style="margin-bottom: 10px">' + signs.technologies + '</h4>' +
 		'	<div class="technologiesGroup" style="margin-bottom: 25px">' +
 		technologiesGroupItemToDOMStr +
-		'		<button type="button" class="btn btn-primary addTechnologiesGroupItemToDOM" style="margin-bottom: 10px">' +
+		'		<button type="button" class="btn btn-primary addTechnologiesGroupItemToDOM" style="margin-bottom: 10px" ' +
+		'' + disabledFormStr + '> ' +
 		'			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> ' + signs.add +
 		'		</button>' +
 		'	</div>' +
 		'' +
-		'	<button type="button" class="btn btn-danger removeProjectExperienceFormGroupItemToDOM">' +
+		'	<button type="button" class="btn btn-danger removeProjectExperienceFormGroupItemToDOM" ' + disabledFormStr + '>' +
 		'  		<span class="glyphicon glyphicon-minus" aria-hidden="true"></span> ' + signs.delete +
 		'	</button>' +
 		'</div>';
@@ -162,25 +173,31 @@ const addProjectExperienceFormGroupItemToDOM = (valueObj) => {
 	formProjectExperienceGroupElem.append('' +
 		'<div class="well well-sm projectExperienceItem" style="margin-bottom: 20px">' +
 		'   <p>' + signs.company_name + '</p>' +
-		'	<input type="text" class="form-control companyNameField" style="margin-bottom: 10px" value="' + companyNameVal + '" />' +
+		'	<input type="text" class="form-control companyNameField" style="margin-bottom: 10px" value="' + companyNameVal + '" ' +
+		'' + disabledFormStr + '/>' +
 		'   <p>' + signs.position + '</p>' +
-		'	<input type="text" class="form-control positionField" style="margin-bottom: 10px" value="' + positionVal + '" />' +
+		'	<input type="text" class="form-control positionField" style="margin-bottom: 10px" value="' + positionVal + '" ' +
+		'' + disabledFormStr + '/>' +
 		'	<p>' + signs.start_date + '</p>' +
-		'	<input type="date" class="form-control startDateField" style="margin-bottom: 10px" value="' + startDateVal + '" />' +
+		'	<input type="date" class="form-control startDateField" style="margin-bottom: 10px" value="' + startDateVal + '" ' +
+		'' + disabledFormStr + '/>' +
 		'	<p>' + signs.end_date + '</p>' +
-		'	<input type="date" class="form-control endDateField" style="margin-bottom: 10px" value="' + endDateVal + '" />' +
+		'	<input type="date" class="form-control endDateField" style="margin-bottom: 10px" value="' + endDateVal + '" ' +
+		'' + disabledFormStr + '/>' +
 		'' +
 		'	<!-- Проекты (Projects)-->' +
 		'	<h3 style="margin-bottom: 10px">' + signs.projects + '</h3>' +
 		'	<div class="projectsGroup" style="margin-bottom: 25px">' +
 		projectGroupItemToDOMStr +
-		'		<button type="button" class="btn btn-primary addProjectGroupItemToDOM" style="margin-bottom: 10px">' +
+		'		<button type="button" class="btn btn-primary addProjectGroupItemToDOM" style="margin-bottom: 10px" ' +
+		'' + disabledFormStr + '>' +
 		'			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> ' + signs.add +
 		'		</button>' +
 		'	</div>' +
 		'	<!-- /Проект (Projects)-->' +
 		'' +
-		'	<button type="button" class="btn btn-danger removeProjectExperienceFormGroupItemToDOM">' +
+		'	<button type="button" class="btn btn-danger removeProjectExperienceFormGroupItemToDOM" ' +
+		'' + disabledFormStr + '>' +
 		'  		<span class="glyphicon glyphicon-minus" aria-hidden="true"></span> ' + signs.delete +
 		'	</button>' +
 		'</div>' +
@@ -210,12 +227,12 @@ const addEducationsGroupItemToDOM = (valueObj = null) => {
 		'<div class="well well-sm educationsItem" style="margin-bottom: 20px">' +
 		'   <p>' + signs.university_name + '</p>' +
 		'	<input type="text" class="form-control universityNameField" style="margin-bottom: 10px"' +
-		'			value="' + universityNameVal + '" />' +
+		'			value="' + universityNameVal + '" ' + disabledFormStr + '/>' +
 		'   <p>' + signs.degree + '</p>' +
 		'	<input type="text" class="form-control degreeField" style="margin-bottom: 10px"' +
-		'			value="' + degreeVal + '" />' +
+		'			value="' + degreeVal + '" ' + disabledFormStr + '/>' +
 		'' +
-		'	<button type="button" class="btn btn-danger removeEducationsGroupItemToDOM">' +
+		'	<button type="button" class="btn btn-danger removeEducationsGroupItemToDOM" ' + disabledFormStr + '>' +
 		'  		<span class="glyphicon glyphicon-minus" aria-hidden="true"></span> ' + signs.delete +
 		'	</button>' +
 		'</div>' +
@@ -231,9 +248,9 @@ const addProfessionalSkillGroupItemToDOM = (value = '') => {
 
 	formProfessionalSkillGroupElem.append('' +
 		'<div class="input-group" style="margin-bottom: 10px">' +
-		'	<input type="text" class="form-control" value="' + value + '" />' +
+		'	<input type="text" class="form-control" value="' + value + '" ' + disabledFormStr + '/>' +
 		'	<span class="input-group-btn">' +
-		'		<button class="btn btn-danger removeProfessionalSkillItemToDOM" type="button">' +
+		'		<button class="btn btn-danger removeProfessionalSkillItemToDOM" type="button" ' + disabledFormStr + '>' +
 		'			<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>' +
 		'		</button>' +
 		'	</span>' +
@@ -263,11 +280,13 @@ const addForeignLanguagesGroupItemToDOM = (valueObj) => {
 	formForeignLanguagesGroupElem.append('' +
 		'<div class="well well-sm foreignLanguagesItem" style="margin-bottom: 20px">' +
 		'   <p>' + signs.language + '</p>' +
-		'	<input type="text" class="form-control languageField" style="margin-bottom: 10px" value="' + languageVal + '" />' +
+		'	<input type="text" class="form-control languageField" style="margin-bottom: 10px" value="' + languageVal + '" ' +
+		'' + disabledFormStr + '/>' +
 		'   <p>' + signs.level_of_proficiency + '</p>' +
-		'	<input type="text" class="form-control levelOfProficiencyField" style="margin-bottom: 10px" value="' + levelOfProficiencyVal + '" />' +
+		'	<input type="text" class="form-control levelOfProficiencyField" style="margin-bottom: 10px" value="' + levelOfProficiencyVal + '" ' +
+		'' + disabledFormStr + '/>' +
 		'' +
-		'	<button type="button" class="btn btn-danger removeForeignLanguagesGroupItemToDOM">' +
+		'	<button type="button" class="btn btn-danger removeForeignLanguagesGroupItemToDOM" ' + disabledFormStr + '>' +
 		'  		<span class="glyphicon glyphicon-minus" aria-hidden="true"></span> ' + signs.delete +
 		'	</button>' +
 		'</div>' +
@@ -283,9 +302,9 @@ const addLinksToOpenSourceGroupItemToDOM = (value = '') => {
 
 	formLinksToOpenSourceGroupElem.append('' +
 		'<div class="input-group" style="margin-bottom: 10px">' +
-		'	<input type="text" class="form-control" value="' + value + '" />' +
+		'	<input type="text" class="form-control" value="' + value + '" ' + disabledFormStr + '/>' +
 		'	<span class="input-group-btn">' +
-		'		<button class="btn btn-danger removeLinksToOpenSourceGroupItemToDOM" type="button">' +
+		'		<button class="btn btn-danger removeLinksToOpenSourceGroupItemToDOM" type="button" ' + disabledFormStr + '>' +
 		'			<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>' +
 		'		</button>' +
 		'	</span>' +
@@ -302,9 +321,9 @@ const addOtherProjectsGroupItemToDOM = (value = '') => {
 
 	formOtherProjectsGroupElem.append('' +
 		'<div class="input-group" style="margin-bottom: 10px">' +
-		'	<input type="text" class="form-control" value="' + value + '" />' +
+		'	<input type="text" class="form-control" value="' + value + '" ' + disabledFormStr + '/>' +
 		'	<span class="input-group-btn">' +
-		'		<button class="btn btn-danger removeOtherProjectsGroupItemToDOM" type="button">' +
+		'		<button class="btn btn-danger removeOtherProjectsGroupItemToDOM" type="button" ' + disabledFormStr + '>' +
 		'			<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>' +
 		'		</button>' +
 		'	</span>' +
@@ -321,9 +340,9 @@ const addSocialNetworksGroupItemToDOM = (value = '') => {
 
 	formSocialNetworksGroupElem.append('' +
 		'<div class="input-group" style="margin-bottom: 10px">' +
-		'	<input type="text" class="form-control" value="' + value + '" />' +
+		'	<input type="text" class="form-control" value="' + value + '" ' + disabledFormStr + '/>' +
 		'	<span class="input-group-btn">' +
-		'		<button class="btn btn-danger removeSocialNetworksGroupItemToDOM" type="button">' +
+		'		<button class="btn btn-danger removeSocialNetworksGroupItemToDOM" type="button" ' + disabledFormStr + '>' +
 		'			<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>' +
 		'		</button>' +
 		'	</span>' +
@@ -630,6 +649,17 @@ class Design {
 		} else {
 			// Значит на странице существует элемент $('#answer')
 			this.mode = 'site';
+		}
+
+		// Блочем формы
+		if (getUrlQueryParameter('mode') !== 'addform') {
+			$('.fullnameField').prop('disabled', true);
+			$('.fullExperienceField').prop('disabled', true);
+			$('.expectedSalaryField').prop('disabled', true);
+			$('.regionWorkLocationField').prop('disabled', true);
+			$('.remoteField').prop('disabled', true);
+			$('.citizenshipField').prop('disabled', true);
+			$('.employmentTypeField').prop('disabled', true);
 		}
 
 		this.focusedInput = false;
